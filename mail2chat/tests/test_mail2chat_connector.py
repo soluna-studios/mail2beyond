@@ -1,3 +1,5 @@
+"""Contains tests that test the mail2chat.framework.BaseConnector class."""
+
 import unittest
 from mail2chat import framework
 
@@ -9,11 +11,11 @@ class ConnectorTestCase(unittest.TestCase):
         class TestChildConnector(framework.BaseConnector):
             """Class to test class inheritance."""
 
-            def submit(self, mail, **kwargs):
+            def submit(self, mail):
                 """Overwrites the submit() method."""
                 return
 
-            def pre_submit(self, mail, **kwargs):
+            def pre_submit(self, mail):
                 """Overwrites the pre-submit method"""
                 return
 

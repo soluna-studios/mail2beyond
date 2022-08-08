@@ -11,20 +11,23 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
+"""Module used to setup and install the mail2chat package."""
 
 from setuptools import setup
 
 
 def read_me():
+    """Opens the README.md file for this package so it can by used in setup.py."""
     # Read the readme file
-    with open('README.md') as f:
-        return f.read()
+    with open('README.md', encoding="utf-8") as read_me_file:
+        return read_me_file.read()
 
 
 def requirements():
-    with open('requirements.txt') as r:
+    """Opens the requirements.txt file for this package so it can by used in setup.py."""
+    with open('requirements.txt', encoding="utf-8") as requirements_file:
         # Read the requirements file and split string in list by newline
-        reqs = r.read().split("\n")
+        reqs = requirements_file.read().split("\n")
 
         # Remove empty items if any
         while "" in reqs:

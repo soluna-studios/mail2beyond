@@ -1,0 +1,9 @@
+[DEFAULT]
+disable=logging-fstring-interpolation
+
+[BASIC]
+good-names=handle_DATA    # aiosmtpd expects class method handle_DATA
+
+[FORMAT]
+max-line-length=120
+

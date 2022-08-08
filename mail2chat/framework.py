@@ -1,3 +1,5 @@
+"""Contains the base framework classes for mail2chat."""
+
 import email
 import ipaddress
 import re
@@ -10,10 +12,15 @@ from aiosmtpd.controller import Controller
 class Error(BaseException):
     """Error object used by mail2chat"""
     def __init__(self, message):
+        super().__init__()
         self.message = message
 
 
 class Listener:
+    """Creates the listener object that accept SMTP requests and applies logic based on a specified pattern."""
+    # Private attributes are not for public consumption.
+    # pylint: disable=too-many-instance-attributes
+
     # Initialize attributes.
     _address = None
     _port = None
@@ -22,18 +29,7 @@ class Listener:
     _enable_starttls = None
     _require_starttls = None
 
-    """Creates the listener object that accept SMTP requests and applies logic based on a specified pattern."""
-
-    def __init__(
-            self,
-            mappings,
-            address="127.0.0.1",
-            port=62125,
-            log_level=logging.NOTSET,
-            tls_context=None,
-            enable_starttls=False,
-            require_starttls=False
-    ):
+    def __init__(self, mappings, address="127.0.0.1", port=62125, **kwargs):
         """
         Initializes the object with the required attributes.
         :param mappings: (list) list of Mapping objects to listen for. A 'default' Mapping object must be included.
@@ -45,16 +41,16 @@ class Listener:
         """
         # Setup logging
         self.log = None
-        self.setup_logging(log_level)
+        self.setup_logging(kwargs.get("log_level", logging.NOTSET))
 
         # Setup mappings and the SMTP controller
         self.controller = None
         self.mappings = mappings
         self.address = address
         self.port = port
-        self.tls_context = tls_context
-        self.enable_starttls = enable_starttls
-        self.require_starttls = require_starttls
+        self.tls_context = kwargs.get("tls_context", None)
+        self.enable_starttls = kwargs.get("enable_starttls", False)
+        self.require_starttls = kwargs.get("require_starttls", False)
         self.setup_controller()
 
     def start(self):
@@ -84,6 +80,12 @@ class Listener:
             raise Error("an unexpected error occurred creating the Listener controller")
 
     def setup_logging(self, level=logging.NOTSET, handler=logging.StreamHandler()):
+        """
+        Sets up the logger for this listener.
+        :param level: (int) the logging level to start logging events.
+        :param handler: (logging.Handler) the logging handler object to use.
+        """
+
         # Reset the existing logger
         del self.log
 
@@ -144,8 +146,9 @@ class Listener:
         # Return the matched mappings if there were any, otherwise return the default mapping.
         if matched_mappings:
             return matched_mappings
-        else:
-            return [default_mapping]
+
+        # Otherwise return default mapping
+        return [default_mapping]
 
     async def handle_DATA(self, server, session, envelope):
         """aiosmtpd method to apply logic for handling data from incoming SMTP message."""
@@ -161,12 +164,8 @@ class Listener:
         # Loop through each matched mapping and run it's connector
         for mapping in mappings:
             self.log.debug(
-                "running connector '{connector}' because {field} '{value}' matched mapping '{pattern}'".format(
-                    connector=mapping.connector,
-                    field=mapping.field.upper(),
-                    value=mail.headers.get(mapping.field),
-                    pattern=mapping.pattern
-                )
+                f"running connector '{mapping.connector}' because {mapping.field.upper()} "
+                f"'{mail.headers.get(mapping.field)}' matched mapping '{mapping.pattern}'"
             )
             mapping.connector.run(mail)
 
@@ -175,46 +174,52 @@ class Listener:
     # Getters and setters
     @property
     def address(self):
+        """Getter for the address property."""
         return self._address
 
     @address.setter
     def address(self, value):
+        """Setter for the address property."""
         # Require address to be valid IP, or localhost
         if value not in ["localhost"]:
             try:
                 ipaddress.ip_address(value)
-            except ValueError:
-                raise Error("'address' must be valid IP or localhost")
+            except ValueError as exc:
+                raise Error("'address' must be valid IP or localhost") from exc
 
         self._address = value
 
     @property
     def port(self):
+        """Getter for the port property."""
         return self._port
 
     @port.setter
     def port(self, value):
+        """Setter for the port property."""
         # Require port to be valid TCP port
-        if type(value) == int and 1 <= value <= 65535:
+        if isinstance(value, int) and 1 <= value <= 65535:
             self._port = value
         else:
             raise Error("'port' must be valid TCP port")
 
     @property
     def mappings(self):
+        """Getter for the mappings property."""
         return self._mappings
 
     @mappings.setter
     def mappings(self, value):
+        """Getter for the mappings property."""
         # Require mappings to be list
-        if type(value) != list:
+        if not isinstance(value, list):
             raise TypeError("'mappings' must be type 'list'")
 
         # Loop through each requested mapping and it is correct object type and a default object is present
         found_default = False
-        for i, mapping in enumerate(value):
+        for mapping in value:
             # Require mapping to be Mapping object
-            if type(mapping) != Mapping:
+            if not isinstance(mapping, Mapping):
                 raise Error("each 'mappings' item must be 'Mapping' object")
 
             # Check if this mapping is the default.
@@ -226,7 +231,7 @@ class Listener:
                     raise Error("multiple 'mappings' items assigned pattern 'default'")
 
             # Assign this listener's logger to each mapping connector
-            value[i].connector.log = self.log
+            mapping.connector.log = self.log
 
         # Ensure we found a default mapping
         if found_default:
@@ -237,10 +242,12 @@ class Listener:
 
     @property
     def tls_context(self):
+        """Getter for the tls_context property."""
         return self._tls_context
 
     @tls_context.setter
     def tls_context(self, value):
+        """Setter for the tls_context property."""
         # Require tls_context to be SSLContext object or None
         if isinstance(value, ssl.SSLContext) or value is None:
             self._tls_context = value
@@ -249,24 +256,28 @@ class Listener:
 
     @property
     def enable_starttls(self):
+        """Getter for the enable_starttls property."""
         return self._enable_starttls
 
     @enable_starttls.setter
     def enable_starttls(self, value):
+        """Setter for the enable_starttls property."""
         # Require enable_starttls to be bool
-        if type(value) == bool:
+        if isinstance(value, bool):
             self._enable_starttls = value
         else:
             raise Error("'enable_starttls' must be type 'bool'")
 
     @property
     def require_starttls(self):
+        """Getter for the require_starttls property."""
         return self._enable_starttls
 
     @require_starttls.setter
     def require_starttls(self, value):
+        """Setter for the require_starttls property."""
         # Require require_starttls to be bool
-        if type(value) != bool:
+        if not isinstance(value, bool):
             raise Error("'require_starttls' must be type 'bool'")
 
         # Require 'enable_tls' to be True before allowing
@@ -316,22 +327,26 @@ class Mapping:
     # Getters and setters #
     @property
     def pattern(self):
+        """Getter for the pattern property."""
         return self._pattern
 
     @pattern.setter
     def pattern(self, value):
+        """Setter for the pattern property."""
         # Require pattern to be a string
-        if type(value) == str:
+        if isinstance(value, str):
             self._pattern = value
         else:
             raise TypeError("pattern must be type 'str'")
 
     @property
     def connector(self):
+        """Getter for the connector property."""
         return self._connector
 
     @connector.setter
     def connector(self, value):
+        """Setter for the connector property."""
         # Require connector to have a base class of Mail2ChatConnector
         if value.__class__.__base__ == BaseConnector:
             self._connector = value
@@ -340,12 +355,14 @@ class Mapping:
 
     @property
     def field(self):
+        """Getter for the field property."""
         return self._field
 
     @field.setter
     def field(self, value):
+        """Setter for the field property."""
         # Require field to be a support/recognized field
-        if type(value) == str:
+        if isinstance(value, str):
             self._field = value
         else:
             raise ValueError("field must be type 'str'")
@@ -368,40 +385,41 @@ class BaseConnector:
         """Use this objects name attribute as it's string representation."""
         return self.name
 
-    def run(self, mail, **kwargs):
+    def run(self, mail):
         """
         Runs the current connector object. This method should not be overwritten by child classes.
         :param mail: (Email) the Email object created for the received mail by the listener's handle_DATA().
         """
         # Try to run pre-submit checks and log errors.
         try:
-            self.pre_submit(mail, **kwargs)
+            self.pre_submit(mail)
         except Error as pre_submit_err:
             self.log.error(f"pre-submit checks for connector '{self}' failed ({pre_submit_err})")
             raise pre_submit_err
 
         # Try to run a submit and log errors
         try:
-            self.submit(mail, **kwargs)
+            self.submit(mail)
         except Exception as submit_error:
             self.log.error(f"submit for connector '{self}' failed ({submit_error})")
             raise submit_error
 
-    def submit(self, mail, **kwargs):
+    def submit(self, mail):
         """
         :param mail: (Email) the Email object created for the received mail by the listener's handle_DATA().
         :raises Error: when this method has not been overwritten by a child class.
         """
-        raise Error("method has not been overwritten by child class")
+        raise Error(f"method has not been overwritten by child class but received {mail}")
 
-    def pre_submit(self, mail, **kwargs):
+    def pre_submit(self, mail):
         """
         Initializes the pre_submit() method that is called before the submit() method. In most cases, this should be
         used to validate the config attribute before submit() is actually executed, but can be useful for any other
         logic required. This method should be overrideen by a child class. Otherwise, a warning will be printed.
         :param mail: (Email) the Email object created for the received mail by the listener's handle_DATA().
+
         """
-        return
+        return mail
 
 
 class Email:
@@ -434,5 +452,5 @@ class Email:
     # Getters and setters
     @property
     def content(self):
-        """Fetches the decode content of the email."""
+        """Fetches the decoded content of the email."""
         return self.headers.get_payload(decode=True)
