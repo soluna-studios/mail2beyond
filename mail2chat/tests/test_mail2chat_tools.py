@@ -1,9 +1,12 @@
+"""Contains tests that test the mail2chat.tools module."""
+
 import os
 import unittest
 import mail2chat
 
 
 class ToolsTestCase(unittest.TestCase):
+    """Creates a test case for testing the mail2chat.tools module."""
     @classmethod
     def setUpClass(cls):
         # Generate a self-signed TLS certificate to use for testing.
@@ -19,6 +22,7 @@ class ToolsTestCase(unittest.TestCase):
             pass
 
     def test_get_connectors_from_dict(self):
+        """Tests the mail2chat.tools.get_connectors_from_dict() method."""
         # Ensure error is raised when config does not contain connectors
         with self.assertRaises(mail2chat.framework.Error):
             mail2chat.tools.get_connectors_from_dict({})
@@ -90,6 +94,7 @@ class ToolsTestCase(unittest.TestCase):
         self.assertEqual(connectors[0].name, "test_connector")
 
     def test_get_connector_by_name(self):
+        """Tests the mail2chat.tools.get_connector_by_name() method."""
         # Ensure None is return if no match is found.
         self.assertIsNone(mail2chat.tools.get_connector_by_name("invalid", []))
 
@@ -98,11 +103,12 @@ class ToolsTestCase(unittest.TestCase):
             mail2chat.connectors.void.Connector,
             mail2chat.tools.get_connector_by_name(
                 name="void",
-                connectors=[mail2chat.connectors.void.Connector]
+                connector_objs=[mail2chat.connectors.void.Connector]
             )
         )
 
     def test_get_mappings_from_dict(self):
+        """Tests the mail2chat.tools.get_mappings_from_dict() method."""
         # Ensure error is raised when config does not contain mappings
         with self.assertRaises(mail2chat.framework.Error):
             mail2chat.tools.get_mappings_from_dict({})
@@ -153,6 +159,7 @@ class ToolsTestCase(unittest.TestCase):
         self.assertEqual(mappings[0].connector.name, "test_connector")
 
     def test_get_listeners_from_dict(self):
+        """Tests the mail2chat.tools.get_listeners_from_dict() method."""
         # Ensure error is raised if no listeners are defined in the config
         with self.assertRaises(mail2chat.framework.Error):
             mail2chat.tools.get_listeners_from_dict(
