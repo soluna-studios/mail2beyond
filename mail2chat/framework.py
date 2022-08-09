@@ -454,3 +454,19 @@ class Email:
     def content(self):
         """Fetches the decoded content of the email."""
         return self.headers.get_payload(decode=True)
+
+
+class BaseParser:
+    """Creates a Parser object that can be used to further parse an Email object."""
+    name = ""
+
+    def __init__(self, content):
+        """Initialize the Parser object with required attributes"""
+        self.content = content
+
+    def parse(self):
+        """
+        Initializes the Parser object's parse() method. By default, this method will simply return the current
+        content attributes. This method is intended to be overwritten
+        """
+        return

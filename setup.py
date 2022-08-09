@@ -40,9 +40,10 @@ setup(
     name='mail2chat',
     author='Jared Hendrickson',
     author_email='jaredhendrickson13@gmail.com',
-    url="https://github.com/jaredhendrickson13/pfsense-vshell",
+    url="https://github.com/jaredhendrickson13/mail2chat",
     license="Apache-2.0",
-    description="An SMTP server that relays messages to Google Chat.",
+    description="A Python based SMTP server package and CLI that redirects incoming SMTP messages to upstream APIs like"
+                " Google Chat, Slack and more!.",
     long_description=read_me(),
     long_description_content_type="text/markdown",
     version="1.0.0",
