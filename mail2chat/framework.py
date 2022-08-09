@@ -171,6 +171,7 @@ class Listener:
             )
 
             # Run the connector with this mapping's parser
+            self.log.debug(f"using parser '{mapping.parser}'")
             mapping.connector.run(mapping.parser(mail))
 
         return '250 Message accepted'
@@ -493,6 +494,10 @@ class BaseParser:
         """
         self.mail = mail
         self.config = kwargs
+
+    def __str__(self):
+        """Sets the string representation of this object."""
+        return self.name
 
     def parse_content(self):
         """
