@@ -8,6 +8,7 @@ import ssl
 from OpenSSL import crypto
 
 from . import connectors
+from . import parsers
 from . import framework
 
 
@@ -93,6 +94,7 @@ def get_mappings_from_dict(config: dict):
     """
     # Variables
     config_connectors = get_connectors_from_dict(config)
+    available_parsers = dict(inspect.getmembers(parsers, inspect.ismodule))
     valid_mappings = []
 
     # Require mappings config to be defined
@@ -126,6 +128,14 @@ def get_mappings_from_dict(config: dict):
 
         # Replace the mapping's connector item with the actual object so it can be passed in with kwargs below
         mapping["connector"] = connector
+
+        # Ensure parser is a known
+        parser = mapping.get("parser", "text")
+        if parser not in available_parsers:
+            raise framework.Error(f"'mappings' item references undefined parser module '{parser}")
+
+        # Replace the mapping's parser item with the actual Parser class so it can be passed into with kwargs below
+        mapping["parser"] = available_parsers.get(parser).Parser
 
         # Add this mapping, it is valid
         mapping_obj = framework.Mapping(**mapping)
