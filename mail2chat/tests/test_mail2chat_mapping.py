@@ -1,6 +1,7 @@
 """Contains tests that test the mail2chat.framework.Mapping class."""
 
 import unittest
+
 from mail2chat import framework
 from mail2chat import connectors
 
@@ -33,6 +34,28 @@ class MappingTestCase(unittest.TestCase):
         # Ensure the parent BaseConnector class is also not accepted
         with self.assertRaises(TypeError):
             self.test_mapping_obj.connector = framework.BaseConnector()
+
+    def test_parser(self):
+        """Tests validation of the Mapping object's 'parser' attribute."""
+        # Exclude this from pylint since it is only for testing purposes.
+        # pylint: disable=too-few-public-methods
+
+        class TestEnvelope:
+            """Creates a mock Envelope object for testing."""
+            content = b"TO: to@example.com\nFROM: from@example.com\nSUBJECT: Example Subject\n\nExample content body"
+
+        # Ensure this value can only be set to a BaseParser child class
+        self.test_mapping_obj.parser = framework.BaseParser
+
+        # Ensure error is raised when not a BaseParser class
+        with self.assertRaises(TypeError):
+            self.test_mapping_obj.parser = False
+
+        # Ensure error is raised when a Parser object not class
+        with self.assertRaises(TypeError):
+            self.test_mapping_obj.parser = framework.BaseParser(
+                framework.Email(None, None, TestEnvelope())
+            )
 
     def test_field(self):
         """Tests validation of the Mapping object's 'field' attribute."""

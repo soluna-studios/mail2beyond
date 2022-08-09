@@ -48,7 +48,7 @@ setup(
     long_description_content_type="text/markdown",
     version="1.0.0",
     scripts=['scripts/mail2chat'],
-    packages=["mail2chat", "mail2chat.connectors"],
+    packages=["mail2chat", "mail2chat.connectors", "mail2chat.parsers"],
     install_requires=requirements(),
     classifiers=[
         "Programming Language :: Python :: 3",

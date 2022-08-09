@@ -29,14 +29,14 @@ class Mail2ChatCLI:
     def parse_args():
         """
         Sets criteria for arguments and parses them into our args property
-        :return: (none) args property will be populated after running
+        @return: (none) args property will be populated after running
         """
         def config_file(value_string):
             """
             Custom path type to be used by argparse module. This validates that an argument value is an existing JSON
             file's path. This is intended to be used by argparse's add_argument method's type parameter only.
-            :param value_string: (string) the value to validated
-            :return: (str) the read JSON file data
+            @param value_string: (string) the value to validated
+            @return: (str) the read JSON file data
             """
             # Convert the value to a path object
             path = pathlib.Path(value_string)
