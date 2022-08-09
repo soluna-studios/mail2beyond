@@ -10,7 +10,7 @@ class Connector(framework.BaseConnector):
     """Defines a connector that forwards received messages to an upstream SMTP server for actual delivery."""
     name = "smtp"
 
-    def submit(self, mail):
+    def submit(self, parser):
         """Overwrites the submit() method to forward the received SMTP message to an upstream SMTP server."""
         # Setup the SMTP client with or without TLS, depending on the configuration
         if self.config.get("smtp_use_tls", False):
@@ -29,7 +29,11 @@ class Connector(framework.BaseConnector):
 
         # Send the SMTP message
         try:
-            client.sendmail(mail.envelope.mail_from, mail.envelope.rcpt_tos, mail.envelope.content.decode())
+            client.sendmail(
+                parser.mail.envelope.mail_from,
+                parser.mail.envelope.rcpt_tos,
+                parser.mail.envelope.content.decode()
+            )
             client.close()
             self.log.debug(f"connector '{self}' successfully forwarded message to {proto}://{host}:{port}")
         except Exception as sendmail_error:
@@ -37,7 +41,7 @@ class Connector(framework.BaseConnector):
             client.close()
             raise sendmail_error
 
-    def pre_submit(self, mail):
+    def pre_submit(self, parser):
         """Overwrites the pre_submit() method to ensure required configuration is set."""
         # Require an 'smtp_host' value to be specified
         if "smtp_host" not in self.config:

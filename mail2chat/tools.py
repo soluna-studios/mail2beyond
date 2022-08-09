@@ -14,8 +14,8 @@ from . import framework
 def get_connectors_from_dict(config: dict):
     """
     Converts dictionary representations of connectors to connector objects.
-    :param config: (dict) a dictionary representation of different connectors to create.
-    :return: (list) a list of Connector objects that can be used.
+    @param config: (dict) a dictionary representation of different connectors to create.
+    @return: (list) a list of Connector objects that can be used.
     """
     # Create a list to store the created connector objects
     valid_connectors = []
@@ -73,9 +73,9 @@ def get_connectors_from_dict(config: dict):
 def get_connector_by_name(name, connector_objs):
     """
     Finds the connector with a specific name from a list of connector objects.
-    :param name: (str) the name of the connector to fetch.
-    :param connector_objs: (list) a list of connector objects to query.
-    :return: (Connector) the connector object with the specified name. or None if there was no match.
+    @param name: (str) the name of the connector to fetch.
+    @param connector_objs: (list) a list of connector objects to query.
+    @return: (Connector) the connector object with the specified name. or None if there was no match.
     """
     # Loop through each connector and return the connector with the specified name
     for connector in connector_objs:
@@ -88,8 +88,8 @@ def get_connector_by_name(name, connector_objs):
 def get_mappings_from_dict(config: dict):
     """
     Converts dictionary representations of mappings to Mapping objects.
-    :param config: (dict) a dictionary representation of different connectors to create.
-    :return: (list) a list of Connector objects that can be used.
+    @param config: (dict) a dictionary representation of different connectors to create.
+    @return: (list) a list of Connector objects that can be used.
     """
     # Variables
     config_connectors = get_connectors_from_dict(config)
@@ -137,9 +137,9 @@ def get_mappings_from_dict(config: dict):
 
 def get_listeners_from_dict(config: dict, log_level: int = logging.NOTSET):
     """Converts dictionary representations of mappings to Mapping objects.
-    :param config: (dict) a dictionary representation of different listeners to create.
-    :param log_level: (int) the logging level to configure listeners to use.
-    :return: (list) a list of valid Listener objects that can be used.
+    @param config: (dict) a dictionary representation of different listeners to create.
+    @param log_level: (int) the logging level to configure listeners to use.
+    @return: (list) a list of valid Listener objects that can be used.
     """
     # Validating listeners from configuration requires many conditions because there are many options.
     # In the future, consider grouping config validation into it's own class with getters and setters.
@@ -288,8 +288,8 @@ def get_listeners_from_dict(config: dict, log_level: int = logging.NOTSET):
 def generate_tls_certificate(cert_path, key_path):
     """
     Generates a self-signed certificate. This is primarily used for unit tests, but could be useful elsewhere.
-    :param cert_path: (str) the file path to store the generated certificate file.
-    :param key_path: (str) the file path to store the generated key file.
+    @param cert_path: (str) the file path to store the generated certificate file.
+    @param key_path: (str) the file path to store the generated key file.
     """
     # Generate private key
     key = crypto.PKey()

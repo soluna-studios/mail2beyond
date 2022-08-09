@@ -11,11 +11,11 @@ class ConnectorTestCase(unittest.TestCase):
         class TestChildConnector(framework.BaseConnector):
             """Class to test class inheritance."""
 
-            def submit(self, mail):
+            def submit(self, parser):
                 """Overwrites the submit() method."""
                 return
 
-            def pre_submit(self, mail):
+            def pre_submit(self, parser):
                 """Overwrites the pre-submit method"""
                 return
 
@@ -27,38 +27,38 @@ class ConnectorTestCase(unittest.TestCase):
         """Test the BaseConnector class's submit() method directly."""
         # Ensure calling the BaseConnector class's submit() method raises an error by default
         with self.assertRaises(framework.Error):
-            self.base_connector.submit(mail=None)
+            self.base_connector.submit(parser=None)
 
     def test_base_connector_run(self):
         """Test the BaseConnector class's run() method directly."""
         # Ensure calling the BaseConnector class's run() method raises an error by default as it calls submit()
         with self.assertRaises(framework.Error):
-            self.base_connector.run(mail=None)
+            self.base_connector.run(parser=None)
 
     def test_base_connector_pre_submit(self):
         """Test the BaseConnector class's pre_submit() method directly."""
         # Ensure calling the BaseConnector class's pre_submit() method returns nothing
-        self.assertIsNone(self.base_connector.pre_submit(mail=None))
+        self.assertIsNone(self.base_connector.pre_submit(parser=None))
 
     def test_child_connector_submit(self):
         """Test the TestChildConnector class's submit() method directly."""
         # Ensure calling the TestChildConnector class's submit() returns nothing since it was overwritten.
         self.assertIsNone(
-            self.child_connector.submit(mail=None)
+            self.child_connector.submit(parser=None)
         )
 
     def test_child_connector_run(self):
         """Test the TestChildConnector class's run() method directly."""
         # Ensure calling the TestChildConnector class's submit() returns nothing since submit() was overwritten.
         self.assertIsNone(
-            self.child_connector.run(mail=None)
+            self.child_connector.run(parser=None)
         )
 
     def test_child_connector_pre_submit(self):
         """Test the TestChildConnector class's pre_submit() method directly."""
         # Ensure calling the TestChildConnector class's pre_submit() method returns nothing
         self.assertIsNone(
-            self.base_connector.pre_submit(mail=None)
+            self.base_connector.pre_submit(parser=None)
         )
 
 

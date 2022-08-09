@@ -6,9 +6,9 @@ class Connector(framework.BaseConnector):
     """Defines a connector that does not do anything."""
     name = "void"
 
-    def submit(self, mail):
+    def submit(self, parser):
         """Overwrites the submit() method, but does nothing."""
         self.log.debug(f"connector '{self}' successfully sent message to the abyss")
 
-    def pre_submit(self, mail):
+    def pre_submit(self, parser):
         """Overwrites the pre_submit() method, but does nothing."""

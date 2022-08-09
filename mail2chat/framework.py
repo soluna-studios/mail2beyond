@@ -1,6 +1,7 @@
 """Contains the base framework classes for mail2chat."""
 
 import email
+import inspect
 import ipaddress
 import re
 import logging
@@ -32,12 +33,12 @@ class Listener:
     def __init__(self, mappings, address="127.0.0.1", port=62125, **kwargs):
         """
         Initializes the object with the required attributes.
-        :param mappings: (list) list of Mapping objects to listen for. A 'default' Mapping object must be included.
-        :param address: (str) the local IP address the SMTP server should listen on.
-        :param port: (int) the local TCP port the SMTP server should listen on.
-        :param address: (str) the remote IP address the SMTP server should allow.
-        :param port: (int) the remote TCP port the SMTP server should allow.
-        :param log_level: (int) the logging level to set.
+        @param mappings: (list) list of Mapping objects to listen for. A 'default' Mapping object must be included.
+        @param address: (str) the local IP address the SMTP server should listen on.
+        @param port: (int) the local TCP port the SMTP server should listen on.
+        @param address: (str) the remote IP address the SMTP server should allow.
+        @param port: (int) the remote TCP port the SMTP server should allow.
+        @param log_level: (int) the logging level to set.
         """
         # Setup logging
         self.log = None
@@ -82,8 +83,8 @@ class Listener:
     def setup_logging(self, level=logging.NOTSET, handler=logging.StreamHandler()):
         """
         Sets up the logger for this listener.
-        :param level: (int) the logging level to start logging events.
-        :param handler: (logging.Handler) the logging handler object to use.
+        @param level: (int) the logging level to start logging events.
+        @param handler: (logging.Handler) the logging handler object to use.
         """
 
         # Reset the existing logger
@@ -111,10 +112,11 @@ class Listener:
             self.log.warning("logging at level DEBUG may expose sensitive information in logs")
 
     def get_default_mapping(self, mappings=None):
-        """Locates the default mapping object from this objects mappings.
-        :param mappings: (list) list of mappings to check for a default in
-        :return: (Mapping) the mapping object that is the default mapping
-        :raises Error: if no mapping is configured as the default
+        """
+        Locates the default mapping object from this objects mappings.
+        @param mappings: (list) list of mappings to check for a default in
+        @return: (Mapping) the mapping object that is the default mapping
+        @raise Error: if no mapping is configured as the default
         """
         # Variables
         mappings = mappings if mappings else self.mappings
@@ -129,8 +131,8 @@ class Listener:
 
     def get_mapping_matches(self, mail):
         """Fetches the mappings that matches the received email.
-        :param mail: (Email) the Email object created for the received mail by handle_DATA().
-        :return: (list) a list of Mapping objects that matched.
+        @param mail: (Email) the Email object created for the received parser by handle_DATA().
+        @return: (list) a list of Mapping objects that matched.
         """
         # Initialize the default mapping in case there were no direct matches.
         default_mapping = self.get_default_mapping()
@@ -167,7 +169,9 @@ class Listener:
                 f"running connector '{mapping.connector}' because {mapping.field.upper()} "
                 f"'{mail.headers.get(mapping.field)}' matched mapping '{mapping.pattern}'"
             )
-            mapping.connector.run(mail)
+
+            # Run the connector with this mapping's parser
+            mapping.connector.run(mapping.parser(mail))
 
         return '250 Message accepted'
 
@@ -289,17 +293,21 @@ class Listener:
 
 class Mapping:
     """Creates a mapping object that sets parameters to control the formatting and relaying of messages."""
+    # Private attributes are not for public consumption.
+    # pylint: disable=too-many-instance-attributes
+
     # Initialize attributes
     _pattern = None
-    _connector = None
     _field = None
+    _connector = None
+    _parser = None
 
     def __init__(self, pattern, connector, **kwargs):
         """
         Initializes the mapping object with desired attributes.
-        :param pattern: (str) the regex pattern to use when searching for matches.
-        :param connector:
-        :param kwargs:
+        @param pattern: (str) the regex pattern to use when searching for matches.
+        @param connector:
+        @param kwargs:
         """
         # Assign required attributes
         self.pattern = pattern
@@ -307,6 +315,7 @@ class Mapping:
 
         # Assign optional attributes, or assume defaults.
         self.field = kwargs.get("field", "from")
+        self.parser = kwargs.get("parser", BaseParser)
 
     def __str__(self):
         """Use the pattern as the string representation of this object."""
@@ -315,8 +324,8 @@ class Mapping:
     def is_match(self, value):
         """
         Checks if a specified value matches this mapping.
-        :param value: the value to match against.
-        :return: (bool) True if the value matches this mapping, False if the value does not match.
+        @param value: the value to match against.
+        @return: (bool) True if the value matches this mapping, False if the value does not match.
         """
         # Check if the value matches this mapping's regex pattern.
         if value is not None and re.search(self.pattern, value):
@@ -347,11 +356,25 @@ class Mapping:
     @connector.setter
     def connector(self, value):
         """Setter for the connector property."""
-        # Require connector to have a base class of Mail2ChatConnector
+        # Require connector to have a base class of mail2chat.framework.BaseConnector
         if value.__class__.__base__ == BaseConnector:
             self._connector = value
         else:
             raise TypeError("connector must be object with base class 'BaseConnector'")
+
+    @property
+    def parser(self):
+        """Getter for the parser property."""
+        return self._parser
+
+    @parser.setter
+    def parser(self, value):
+        """Setter for the parser property."""
+        # Require parser to have a base class of mail2chat.framework.BaseParser
+        if inspect.isclass(value) and hasattr(value, "parse_content"):
+            self._parser = value
+        else:
+            raise TypeError("parser must be a class (not object) with base class 'BaseParser'")
 
     @property
     def field(self):
@@ -385,57 +408,58 @@ class BaseConnector:
         """Use this objects name attribute as it's string representation."""
         return self.name
 
-    def run(self, mail):
+    def run(self, parser):
         """
         Runs the current connector object. This method should not be overwritten by child classes.
-        :param mail: (Email) the Email object created for the received mail by the listener's handle_DATA().
+        @param parser: (Parser) the parser object this connector should use.
         """
         # Try to run pre-submit checks and log errors.
         try:
-            self.pre_submit(mail)
+            self.pre_submit(parser)
         except Error as pre_submit_err:
             self.log.error(f"pre-submit checks for connector '{self}' failed ({pre_submit_err})")
             raise pre_submit_err
 
         # Try to run a submit and log errors
         try:
-            self.submit(mail)
+            self.submit(parser)
         except Exception as submit_error:
             self.log.error(f"submit for connector '{self}' failed ({submit_error})")
             raise submit_error
 
-    def submit(self, mail):
+    def submit(self, parser):
         """
-        :param mail: (Email) the Email object created for the received mail by the listener's handle_DATA().
-        :raises Error: when this method has not been overwritten by a child class.
+        @param parser: (Parser) the parser object this connector should use.
+        @raise Error: when this method has not been overwritten by a child class.
         """
-        raise Error(f"method has not been overwritten by child class but received {mail}")
+        raise Error(f"method has not been overwritten by child class but received {parser}")
 
-    def pre_submit(self, mail):
+    def pre_submit(self, parser):
         """
         Initializes the pre_submit() method that is called before the submit() method. In most cases, this should be
         used to validate the config attribute before submit() is actually executed, but can be useful for any other
         logic required. This method should be overrideen by a child class. Otherwise, a warning will be printed.
-        :param mail: (Email) the Email object created for the received mail by the listener's handle_DATA().
-
+        @param parser: (Parser) the parser object this connector should use.
         """
-        return mail
+        return parser
 
 
 class Email:
     """Creates an email object that contains the parsed SMTP email."""
 
-    def __init__(self, server, session, envelope):
+    def __init__(self, server, session, envelope, **kwargs):
         """
         Initialize the object with required values.
-        :param server:  (Server) the SMTP server object that handled the SMTP session from aiosmtpd
-        :param session: (Session) the SMTP session object of the established SMTP session from aiosmtpd
-        :param envelope: (Envelope) the envelope object of the received SMTP message from aiosmtpd
+        @param server:  (Server) the SMTP server object that handled the SMTP session from aiosmtpd
+        @param session: (Session) the SMTP session object of the established SMTP session from aiosmtpd
+        @param envelope: (Envelope) the envelope object of the received SMTP message from aiosmtpd
+        @param parser: (Parser) the Parser object to use when parsing the content body
         """
         self.server = server
         self.session = session
         self.envelope = envelope
         self.headers = email.message_from_bytes(envelope.content)
+        self.parser_cls = kwargs.get("parser", BaseParser)
 
     def get_peer_ip(self):
         """Returns the IP of the remote port"""
@@ -452,5 +476,67 @@ class Email:
     # Getters and setters
     @property
     def content(self):
-        """Fetches the decoded content of the email."""
-        return self.headers.get_payload(decode=True)
+        """Fetches the decoded and parsed content of the email."""
+        return self.parser_cls(self).parse_content()
+
+
+class BaseParser:
+    """Creates a Parser object that can be used to further parse an Email object's content property."""
+    name = ""
+    _mail = None
+    _config = None
+
+    def __init__(self, mail, **kwargs):
+        """
+        Initialize the Parser object with required attributes.
+        @param mail: (mail2chat.framework.Email) the email object created by mail2chat.framework.Listener.handle_DATA
+        """
+        self.mail = mail
+        self.config = kwargs
+
+    def parse_content(self):
+        """
+        Initializes the Parser object's parse_content() method. By default, this method will simply return the current
+        content decoded content from the 'parser' property. This method is intended to be overwritten to add parsers for
+        various formats.
+        """
+        return self.content
+
+    # Getters and setters
+    @property
+    def mail(self):
+        """Getter for the parser property."""
+        return self._mail
+
+    @mail.setter
+    def mail(self, value):
+        """Setter for the parser property."""
+        # Ensure value is a mail2chat.framework.Email object
+        if not isinstance(value, Email):
+            raise Error("'parser' must be type 'mail2chat.framework.Email'")
+
+        self._mail = value
+
+    @property
+    def subject(self):
+        """Getter for the subject property."""
+        return self.mail.headers.get("subject", "No subject")
+
+    @property
+    def content(self):
+        """Getter for the content property."""
+        return self.mail.headers.get_payload(decode=True).decode()
+
+    @property
+    def config(self):
+        """Getter for the config property."""
+        return self._config
+
+    @config.setter
+    def config(self, value):
+        """Setter for the config property."""
+        # Ensure config is a dict
+        if not isinstance(value, dict):
+            raise Error("'config' must be type 'dict'")
+
+        self._config = value
