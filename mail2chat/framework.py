@@ -13,8 +13,7 @@ from aiosmtpd.controller import Controller
 class Error(BaseException):
     """Error object used by mail2chat"""
     def __init__(self, message):
-        super().__init__()
-        self.message = message
+        super().__init__(message)
 
 
 class Listener:
@@ -448,7 +447,7 @@ class BaseConnector:
 class Email:
     """Creates an email object that contains the parsed SMTP email."""
 
-    def __init__(self, server, session, envelope, **kwargs):
+    def __init__(self, server, session, envelope):
         """
         Initialize the object with required values.
         @param server:  (Server) the SMTP server object that handled the SMTP session from aiosmtpd
@@ -460,7 +459,6 @@ class Email:
         self.session = session
         self.envelope = envelope
         self.headers = email.message_from_bytes(envelope.content)
-        self.parser_cls = kwargs.get("parser", BaseParser)
 
     def get_peer_ip(self):
         """Returns the IP of the remote port"""
@@ -478,7 +476,7 @@ class Email:
     @property
     def content(self):
         """Fetches the decoded and parsed content of the email."""
-        return self.parser_cls(self).parse_content()
+        return self.headers.get_payload(decode=True).decode()
 
 
 class BaseParser:
@@ -505,7 +503,7 @@ class BaseParser:
         content decoded content from the 'parser' property. This method is intended to be overwritten to add parsers for
         various formats.
         """
-        return self.content
+        return self.mail.content
 
     # Getters and setters
     @property
@@ -530,7 +528,7 @@ class BaseParser:
     @property
     def content(self):
         """Getter for the content property."""
-        return self.mail.headers.get_payload(decode=True).decode()
+        return self.parse_content()
 
     @property
     def config(self):
