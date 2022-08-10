@@ -130,9 +130,9 @@ def get_mappings_from_dict(config: dict):
         mapping["connector"] = connector
 
         # Ensure parser is a known
-        parser = mapping.get("parser", "text")
+        parser = mapping.get("parser", "auto")
         if parser not in available_parsers:
-            raise framework.Error(f"'mappings' item references undefined parser module '{parser}")
+            raise framework.Error(f"'mappings' item references undefined parser module '{parser}'")
 
         # Replace the mapping's parser item with the actual Parser class so it can be passed into with kwargs below
         mapping["parser"] = available_parsers.get(parser).Parser
