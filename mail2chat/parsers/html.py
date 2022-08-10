@@ -1,6 +1,5 @@
 """
-Module that contains parsers that parse an email's content body as plaintext. This module simply extends the
-mail2chat.framework.BaseParser class but retains it's default functionality.
+Module that contains parsers that parse an email's content body as HTML and converts it to a markdown format.
 """
 
 import html2text
