@@ -453,7 +453,6 @@ class Email:
         @param server:  (Server) the SMTP server object that handled the SMTP session from aiosmtpd
         @param session: (Session) the SMTP session object of the established SMTP session from aiosmtpd
         @param envelope: (Envelope) the envelope object of the received SMTP message from aiosmtpd
-        @param parser: (Parser) the Parser object to use when parsing the content body
         """
         self.server = server
         self.session = session
@@ -492,6 +491,7 @@ class BaseParser:
         """
         self.mail = mail
         self.config = kwargs
+        self.log = logging.getLogger(__name__)
 
     def __str__(self):
         """Sets the string representation of this object."""
