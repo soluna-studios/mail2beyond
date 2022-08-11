@@ -17,8 +17,6 @@ class Parser(framework.BaseParser):
     def parse_content(self):
         """Automatically selects the parser to use based on the mail's content-type header and parses the content."""
         # Use the html parser if html content type
-        print(self.mail.headers.get_content_type().lower())
-
         if self.mail.headers.get_content_type().lower() == "text/html":
             return html.Parser(self.mail).content
 
