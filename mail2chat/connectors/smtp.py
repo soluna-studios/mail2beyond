@@ -82,7 +82,7 @@ class Connector(framework.BaseConnector):
                 raise framework.Error(f"connector '{self}' config value 'smtp_login_user' must be type 'str'")
 
             # Require an 'smtp_login_password' value to be specified
-            if "smtp_login_user" not in self.config:
+            if "smtp_login_password" not in self.config:
                 raise framework.Error(f"connector '{self}' requires config value 'smtp_login_password'")
 
             # Ensure 'smtp_login_password' is a str

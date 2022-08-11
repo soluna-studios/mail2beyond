@@ -56,8 +56,8 @@ class ToolsTestCase(unittest.TestCase):
             mail2chat.tools.get_connectors_from_dict(
                 {
                     "connectors": [
-                        {"name": "test_connector", "connector": "void"},
-                        {"name": "test_connector", "connector": "void"}
+                        {"name": "test_connector", "module": "void"},
+                        {"name": "test_connector", "module": "void"}
                     ]
                 }
             )
@@ -77,7 +77,7 @@ class ToolsTestCase(unittest.TestCase):
             mail2chat.tools.get_connectors_from_dict(
                 {
                     "connectors": [
-                        {"name": "test_connector", "connector": "invalid"}
+                        {"name": "test_connector", "module": "invalid"}
                     ]
                 }
             )
@@ -86,7 +86,7 @@ class ToolsTestCase(unittest.TestCase):
         connectors = mail2chat.tools.get_connectors_from_dict(
             {
                 "connectors": [
-                    {"name": "test_connector", "connector": "void"}
+                    {"name": "test_connector", "module": "void"}
                 ]
             }
         )

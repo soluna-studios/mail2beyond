@@ -50,15 +50,15 @@ def get_connectors_from_dict(config: dict):
                 raise framework.Error(f"multiple 'connectors' items assigned name '{obj.name}'")
 
         # Require connector type to be defined
-        if "connector" not in connector.keys():
-            raise framework.Error("'connectors' configuration items must contain 'connector' value")
+        if "module" not in connector.keys():
+            raise framework.Error("'connectors' configuration items must contain 'module' value")
 
         # Require connector type to be known
-        if connector["connector"] not in available_connectors:
-            raise framework.Error("'connectors' configuration items must contain 'connector' value")
+        if connector["module"] not in available_connectors:
+            raise framework.Error("'connectors' configuration items must contain 'module' value")
 
         # Get the connector module that matches this connector
-        connector_module = available_connectors.get(connector["connector"])
+        connector_module = available_connectors.get(connector["module"])
 
         # Add this connector, it is valid
         connector_obj = connector_module.Connector()
