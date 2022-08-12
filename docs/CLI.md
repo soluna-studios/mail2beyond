@@ -188,3 +188,9 @@ must be created for your space beforehand. Available options for this module are
   - _Required_: Yes
   - _Description_: The full Slack webhook URL. For help to create a webhook, refer to 
   https://developers.google.com/chat/how-tos/webhooks
+
+## Starting the Server
+Once you have your configuration file written, you can start the server by running the following command:
+```commandline
+mail2chat --config /path/to/your/config.yml
+```

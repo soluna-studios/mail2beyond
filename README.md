@@ -9,7 +9,7 @@ Google Chat, Slack, or even your own API! This includes a command line interface
 Mail2Chat as a standalone server, as well as a Python package that you can use to extend or integrate into your own
 applications. 
 
-## How is this useful? 
+## How is This Useful? 
 Emails are often ignored due to the amount of spam we receive on a daily basis. Many systems and applications use SMTP
 to send mail alerts, notices and other information that may be important. This commonly causes important information to
 be overlooked or outright ignored. At the same time, many organizations are using real-time messaging services like
@@ -19,13 +19,13 @@ to help keep your teams informed!
 Beyond messaging services, Mail2Chat can also be extended to include connectors to your own APIs to build out complex
 automation flows based on incoming SMTP messages.
 
-## How does Mail2Chat work?
+## How Does Mail2Chat Work?
 Mail2Chat continually listens for incoming SMTP messages. When a message is received, the message is parsed and checked
 against a set of admin configured mappings that dictate which API connector is to be used. Mappings define which SMTP 
 headers should be checked for a specific regular expression match. When a match is found, the email contents are parsed
 and sent to the upstream API using the connector specified in the mapping.
 
-## Getting started
+## Getting Started
 There are a few terms you should be familiar with:
 
 ### Listeners
@@ -44,3 +44,7 @@ Connectors are simply the API connectors Mail2Chat can interact with. Built-in c
 ### Mappings
 Mappings define which SMTP messages use which connector. This checks if a specific SMTP header matches a particular
 regular expression. If a match is found, the message is sent using the connector specified in the mapping.
+
+## Developer Documentation
+- [CLI Documentation](https://github.com/jaredhendrickson13/mail2chat/blob/documentation/docs/CLI.md)
+- [Python Package Documentation](https://github.com/jaredhendrickson13/mail2chat/blob/documentation/docs/PACKAGE.md)
