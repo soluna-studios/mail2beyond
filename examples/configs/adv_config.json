@@ -1,0 +1,85 @@
+{
+  "listeners": [
+    {
+      "address": "localhost",
+      "port": 25,
+      "enable_starttls": true,
+      "tls_cert": "/tmp/example_certificate.pem",
+      "tls_key": "/tmp/example_private_key.pem"
+    },
+    {
+      "address": "0.0.0.0",
+      "port": 465,
+      "enable_smtps": true,
+      "tls_cert": "/tmp/example_certificate.pem",
+      "tls_key": "/tmp/example_private_key.pem",
+      "minimum_tls_protocol": "tls1_2"
+    }
+  ],
+  "connectors": [
+    {
+      "name": "development_google_chat_space",
+      "module": "google_chat",
+      "config": {
+        "webhook_url": "<YOUR GOOGLE CHAT WEBHOOK URL FOR DEVELOPMENT SPACE>"
+      }
+    },
+    {
+      "name": "it_google_chat_space",
+      "module": "google_chat",
+      "config": {
+        "webhook_url": "<YOUR GOOGLE CHAT WEBHOOK URL FOR IT SPACE>"
+      }
+    },
+    {
+      "name": "my_slack_channel",
+      "module": "slack",
+      "config": {
+        "webhook_url": "<YOUR SLACK WEBHOOK URL>"
+      }
+    },
+    {
+      "name": "my_upstream_smtp_server",
+      "module": "smtp",
+      "config": {
+        "smtp_host": "mymailserver.example.com",
+        "smtp_port": 2525,
+        "smtp_use_tls": true,
+        "smtp_use_login": true,
+        "smtp_login_user": "my_user",
+        "smtp_login_password": "my_password"
+      }
+    },
+    {
+      "name": "my_trash_bin",
+      "module": "void"
+    }
+  ],
+  "mappings": [
+    {
+      "pattern": "^developer",
+      "field": "to",
+      "connector": "development_google_chat_space"
+    },
+    {
+      "pattern": "^.*IT.*URGENT$",
+      "field": "subject",
+      "connector": "it_google_chat_space"
+    },
+    {
+      "pattern": "^Thu.*Aug 2022.*$",
+      "field": "date",
+      "connector": "my_slack_channel",
+      "parser": "html"
+    },
+    {
+      "pattern": "^spam@example.com$",
+      "field": "from",
+      "connector": "my_trash_bin"
+    },
+    {
+      "pattern": "default",
+      "connector": "my_upstream_smtp_server"
+    }
+  ]
+}

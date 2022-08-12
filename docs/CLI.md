@@ -13,7 +13,9 @@ tool. The CLI allows you define listeners, connectors and mappings using a JSON 
 | `--help (-h)`          | No       | Prints the help page.                                                         |
 
 ## Configuration
-A configuration file must be written before `mail2chat` is started. Configuration requirements and options are:
+A configuration file must be written before `mail2chat` is started. It may also be helpful to check out the 
+[examples on GitHub](https://github.com/jaredhendrickson13/mail2chat/tree/master/examples/configs). Configuration 
+requirements and options are:
 
 -----------------------------------------------------------------------------------------------------------------------
 ### `listeners`

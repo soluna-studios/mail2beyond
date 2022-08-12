@@ -30,7 +30,7 @@ There are a few terms you should be familiar with:
 
 ### Listeners
 Listeners are individual instances of the Mail2Chat SMTP server. Listeners define what address, port and protocol the 
-server will listen for. Commonly, users will configure a listener for SMTP and another for SMTPS. Additionally, 
+server will listen on. Commonly, users will configure a listener for SMTP and another for SMTPS. Additionally, 
 listeners can be configured to advertise or require the STARTTLS option to upgrade unencrypted connections to encrypted
 connections.
 

@@ -1,0 +1,76 @@
+---
+listeners:
+  # Listen for basic SMTP messages on localhost port 25 and advertise STARTTLS
+  - address: localhost
+    port: 25
+    enable_starttls: true
+    tls_cert: /tmp/example_certificate.pem
+    tls_key: /tmp/example_private_key.pem
+
+  # Listen for encrypted SMTPS messages on any address known to the local system with a minimum protocol of TLSv1.2
+  - address: 0.0.0.0
+    port: 465
+    enable_smtps: true
+    tls_cert: /tmp/example_certificate.pem
+    tls_key: /tmp/example_private_key.pem
+    minimum_tls_protocol: tls1_2
+
+connectors:
+  # Create a connector for a development team's Google Chat space
+  - name: development_google_chat_space
+    module: google_chat
+    config:
+      webhook_url:  <YOUR GOOGLE CHAT WEBHOOK URL FOR DEVELOPMENT SPACE>
+
+  # Create a connector for an IT team's Google Chat space
+  - name: it_google_chat_space
+    module: google_chat
+    config:
+      webhook_url:  <YOUR GOOGLE CHAT WEBHOOK URL FOR IT SPACE>
+
+  # Create a connector for a Slack channel
+  - name: my_slack_channel
+    module: slack
+    config:
+      webhook_url: <YOUR SLACK WEBHOOK URL>
+
+  # Create a connector that forwards the received SMTP message to an upstream SMTP server for actual delivery
+  - name: my_upstream_smtp_server
+    module: smtp
+    config:
+      smtp_host: mymailserver.example.com
+      smtp_port: 2525
+      smtp_use_tls: true
+      smtp_use_login: true
+      smtp_login_user: my_user
+      smtp_login_password: my_password
+
+  # Create connector that discards messages
+  - name: my_trash_bin
+    module: void
+
+mappings:
+  # Redirect SMTP messages with recipient that starts with 'developer' to the Development Google Chat space connector
+  - pattern: "^developer"
+    field: to
+    connector: development_google_chat_space
+
+  # Redirect SMTP messages with subject that contains 'IT' and ends with 'URGENT' to the IT Google Chat space connector
+  - pattern: "^.*IT.*URGENT$"
+    field: subject
+    connector: it_google_chat_space
+
+  # Redirect SMTP messages to Slack on Thursdays in August 2022 and always parse the content body as HTML
+  - pattern: "^Thu.*Aug 2022.*$"
+    field: date
+    connector: my_slack_channel
+    parser: html
+
+  # Discard anything from spam email address
+  - pattern: "^spam@example.com$"
+    field: from
+    connector: my_trash_bin
+
+  # Forward anything that wasn't matched to the upstream SMTP server
+  - pattern: default
+    connector: my_upstream_smtp_server
