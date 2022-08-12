@@ -150,7 +150,7 @@ class ToolsTestCase(unittest.TestCase):
                     {"name": "test_connector", "module": "void"}
                 ],
                 "mappings": [
-                    {"pattern": "TEST_PATTERN", "field": "sender", "module": "test_connector"}
+                    {"pattern": "TEST_PATTERN", "field": "sender", "connector": "test_connector"}
                 ]
             }
         )
@@ -165,7 +165,7 @@ class ToolsTestCase(unittest.TestCase):
             mail2beyond.tools.get_listeners_from_dict(
                 {
                     "mappings": [{"pattern": "default", "connector": "void"}],
-                    "connectors": [{"name": "void", "connector": "void"}]
+                    "connectors": [{"name": "void", "module": "void"}]
                 }
             )
 
@@ -174,7 +174,7 @@ class ToolsTestCase(unittest.TestCase):
             mail2beyond.tools.get_listeners_from_dict(
                 {
                     "mappings": [{"pattern": "default", "connector": "void"}],
-                    "connectors": [{"name": "void", "connector": "void"}],
+                    "connectors": [{"name": "void", "module": "void"}],
                     "listeners": False
                 }
             )
@@ -184,7 +184,7 @@ class ToolsTestCase(unittest.TestCase):
             mail2beyond.tools.get_listeners_from_dict(
                 {
                     "mappings": [{"pattern": "default", "connector": "void"}],
-                    "connectors": [{"name": "void", "connector": "void"}],
+                    "connectors": [{"name": "void", "module": "void"}],
                     "listeners": []
                 }
             )
@@ -194,7 +194,7 @@ class ToolsTestCase(unittest.TestCase):
             mail2beyond.tools.get_listeners_from_dict(
                 {
                     "mappings": [{"pattern": "default", "connector": "void"}],
-                    "connectors": [{"name": "void", "connector": "void"}],
+                    "connectors": [{"name": "void", "module": "void"}],
                     "listeners": [False]
                 }
             )
@@ -204,7 +204,7 @@ class ToolsTestCase(unittest.TestCase):
             mail2beyond.tools.get_listeners_from_dict(
                 {
                     "mappings": [{"pattern": "default", "connector": "void"}],
-                    "connectors": [{"name": "void", "connector": "void"}],
+                    "connectors": [{"name": "void", "module": "void"}],
                     "listeners": [{}]
                 }
             )
@@ -214,7 +214,7 @@ class ToolsTestCase(unittest.TestCase):
             mail2beyond.tools.get_listeners_from_dict(
                 {
                     "mappings": [{"pattern": "default", "connector": "void"}],
-                    "connectors": [{"name": "void", "connector": "void"}],
+                    "connectors": [{"name": "void", "module": "void"}],
                     "listeners": [
                         {
                             "address": "127.0.0.1"
@@ -228,7 +228,7 @@ class ToolsTestCase(unittest.TestCase):
             mail2beyond.tools.get_listeners_from_dict(
                 {
                     "mappings": [{"pattern": "default", "connector": "void"}],
-                    "connectors": [{"name": "void", "connector": "void"}],
+                    "connectors": [{"name": "void", "module": "void"}],
                     "listeners": [
                         {
                             "address": "127.0.0.1",
@@ -246,7 +246,7 @@ class ToolsTestCase(unittest.TestCase):
             mail2beyond.tools.get_listeners_from_dict(
                 {
                     "mappings": [{"pattern": "default", "connector": "void"}],
-                    "connectors": [{"name": "void", "connector": "void"}],
+                    "connectors": [{"name": "void", "module": "void"}],
                     "listeners": [
                         {
                             "address": "127.0.0.1",
@@ -265,7 +265,7 @@ class ToolsTestCase(unittest.TestCase):
             mail2beyond.tools.get_listeners_from_dict(
                 {
                     "mappings": [{"pattern": "default", "connector": "void"}],
-                    "connectors": [{"name": "void", "connector": "void"}],
+                    "connectors": [{"name": "void", "module": "void"}],
                     "listeners": [
                         {
                             "address": "127.0.0.1",
@@ -283,7 +283,7 @@ class ToolsTestCase(unittest.TestCase):
             mail2beyond.tools.get_listeners_from_dict(
                 {
                     "mappings": [{"pattern": "default", "connector": "void"}],
-                    "connectors": [{"name": "void", "connector": "void"}],
+                    "connectors": [{"name": "void", "module": "void"}],
                     "listeners": [
                         {
                             "address": "127.0.0.1",
@@ -300,7 +300,7 @@ class ToolsTestCase(unittest.TestCase):
         # Create a SMTP, STARTTLS and SMTPS listener via dict
         config = {
             "mappings": [{"pattern": "default", "connector": "void"}],
-            "connectors": [{"name": "void", "connector": "void"}],
+            "connectors": [{"name": "void", "module": "void"}],
             "listeners": [
                 {"address": "127.0.0.1", "port": 2525},
                 {
