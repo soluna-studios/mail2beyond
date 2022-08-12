@@ -147,10 +147,10 @@ class ToolsTestCase(unittest.TestCase):
         mappings = mail2beyond.tools.get_mappings_from_dict(
             {
                 "connectors": [
-                    {"name": "test_connector", "connector": "void"}
+                    {"name": "test_connector", "module": "void"}
                 ],
                 "mappings": [
-                    {"pattern": "TEST_PATTERN", "field": "sender", "connector": "test_connector"}
+                    {"pattern": "TEST_PATTERN", "field": "sender", "module": "test_connector"}
                 ]
             }
         )
