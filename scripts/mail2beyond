@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import logging
-import mail2chat
+import mail2beyond
 import argparse
 import pathlib
 import json
@@ -9,11 +9,11 @@ import sys
 import signal
 
 
-class Mail2ChatCLI:
+class Mail2BeyondCLI:
     def __init__(self):
         # Parse command line arguments and create the SMTP listener
         self.args = self.parse_args()
-        self.listeners = mail2chat.tools.get_listeners_from_dict(
+        self.listeners = mail2beyond.tools.get_listeners_from_dict(
             config=self.args.config,
             log_level=logging.DEBUG if self.args.verbose else logging.INFO
         )
@@ -64,7 +64,7 @@ class Mail2ChatCLI:
 
         # Setup parser and define arguments
         parser = argparse.ArgumentParser(description='Run an SMTP server that relays messages to upstream APIs.')
-        parser.prog = "mail2chat"
+        parser.prog = "mail2beyond"
         parser.add_argument(
             '--config', '-c',
             dest="config",
@@ -91,8 +91,8 @@ class Mail2ChatCLI:
 # RUNTIME
 # Run the CLI, allow user to trigger KeyboardInterrupt (ctl + c) or EOFError (ctl + d) to safely exit the script
 try:
-    Mail2ChatCLI()
-except mail2chat.framework.Error as err:
+    Mail2BeyondCLI()
+except mail2beyond.framework.Error as err:
     print(f"config error: {str(err)}")
     sys.exit(1)
 except (LookupError, OSError) as err:

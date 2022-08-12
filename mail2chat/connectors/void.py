@@ -1,5 +1,5 @@
 """Creates the built-in 'void' connector that can be used to discard SMTP messages."""
-from mail2chat import framework
+from mail2beyond import framework
 
 
 class Connector(framework.BaseConnector):

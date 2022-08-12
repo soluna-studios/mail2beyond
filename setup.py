@@ -11,7 +11,7 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-"""Module used to setup and install the mail2chat package."""
+"""Module used to setup and install the mail2beyond package."""
 
 from setuptools import setup
 
@@ -37,18 +37,18 @@ def requirements():
 
 
 setup(
-    name='mail2chat',
+    name='mail2beyond',
     author='Jared Hendrickson',
     author_email='jaredhendrickson13@gmail.com',
-    url="https://github.com/jaredhendrickson13/mail2chat",
+    url="https://github.com/jaredhendrickson13/mail2beyond",
     license="Apache-2.0",
     description="A Python based SMTP server package and CLI that redirects incoming SMTP messages to upstream APIs like"
                 " Google Chat, Slack and more!.",
     long_description=read_me(),
     long_description_content_type="text/markdown",
     version="1.0.0",
-    scripts=['scripts/mail2chat'],
-    packages=["mail2chat", "mail2chat.connectors", "mail2chat.parsers"],
+    scripts=['scripts/mail2beyond'],
+    packages=["mail2beyond", "mail2beyond.connectors", "mail2beyond.parsers"],
     install_requires=requirements(),
     classifiers=[
         "Programming Language :: Python :: 3",

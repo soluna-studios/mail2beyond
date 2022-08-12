@@ -4,7 +4,7 @@ Module that contains parsers that parse an email's content body as HTML and conv
 
 import html2text
 
-from mail2chat import framework
+from mail2beyond import framework
 
 
 class Parser(framework.BaseParser):

@@ -4,11 +4,11 @@ Creates the built-in 'google_chat' connector that can be used to translate SMTP 
 
 import requests
 
-from mail2chat import framework
+from mail2beyond import framework
 
 
 class Connector(framework.BaseConnector):
-    """Defines a connector that allows mail2chat to integrate with Google Chat."""
+    """Defines a connector that allows mail2beyond to integrate with Google Chat."""
     name = "google_chat"
 
     def submit(self, parser):

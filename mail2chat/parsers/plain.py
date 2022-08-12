@@ -1,9 +1,9 @@
 """
 Module that contains parsers that parse an email's content body as plaintext. This module simply extends the
-mail2chat.framework.BaseParser class but retains it's default functionality.
+mail2beyond.framework.BaseParser class but retains it's default functionality.
 """
 
-from mail2chat import framework
+from mail2beyond import framework
 
 
 class Parser(framework.BaseParser):

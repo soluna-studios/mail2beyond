@@ -27,10 +27,10 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - name: Install mail2chat package
+      - name: Install mail2beyond package
         run: |
           python3 -m pip install .
           
-      - name: Test mail2chat package
+      - name: Test mail2beyond package
         run: |
           python3 -m unittest

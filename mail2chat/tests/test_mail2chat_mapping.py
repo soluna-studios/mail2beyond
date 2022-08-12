@@ -1,13 +1,13 @@
-"""Contains tests that test the mail2chat.framework.Mapping class."""
+"""Contains tests that test the mail2beyond.framework.Mapping class."""
 
 import unittest
 
-from mail2chat import framework
-from mail2chat import connectors
+from mail2beyond import framework
+from mail2beyond import connectors
 
 
 class MappingTestCase(unittest.TestCase):
-    """Creates a test case for testing the mail2chat.framework.Mapping class."""
+    """Creates a test case for testing the mail2beyond.framework.Mapping class."""
     def setUp(self):
         """Setup the test environment."""
         self.test_connector_obj = connectors.void.Connector()

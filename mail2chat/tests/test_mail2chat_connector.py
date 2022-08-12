@@ -1,7 +1,7 @@
-"""Contains tests that test the mail2chat.framework.BaseConnector class."""
+"""Contains tests that test the mail2beyond.framework.BaseConnector class."""
 
 import unittest
-from mail2chat import framework
+from mail2beyond import framework
 
 
 class ConnectorTestCase(unittest.TestCase):

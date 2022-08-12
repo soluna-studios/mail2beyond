@@ -1,14 +1,14 @@
-"""Contains tests that test the mail2chat.framework.Listener class."""
+"""Contains tests that test the mail2beyond.framework.Listener class."""
 
 import smtplib
 import unittest
 
-from mail2chat import connectors
-from mail2chat import framework
+from mail2beyond import connectors
+from mail2beyond import framework
 
 
 class ListenerTestCase(unittest.TestCase):
-    """Creates a test case for testing the mail2chat.framework.Listener class."""
+    """Creates a test case for testing the mail2beyond.framework.Listener class."""
     def setUp(self):
         """Setup the test environment."""
         # Create mappings to assign the listener

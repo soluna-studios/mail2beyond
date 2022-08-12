@@ -4,11 +4,11 @@ Creates the built-in 'slack' connector that can be used to translate SMTP messag
 
 import requests
 
-from mail2chat import framework
+from mail2beyond import framework
 
 
 class Connector(framework.BaseConnector):
-    """Defines a connector that allows mail2chat to integrate with Slack."""
+    """Defines a connector that allows mail2beyond to integrate with Slack."""
     name = "slack"
 
     def submit(self, parser):

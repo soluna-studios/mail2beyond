@@ -1,14 +1,14 @@
-Mail2Chat Python Package Documentation
+Mail2Beyond Python Package Documentation
 ======================================
-Mail2Chat is built upon a simple framework that allows developers to integrate Mail2Chat into their own applications, 
+Mail2Beyond is built upon a simple framework that allows developers to integrate Mail2Beyond into their own applications, 
 extend the existing functionality by writing custom connector and parser modules. If you are just getting started, it
 is recommended to first familiarize yourself with the 
-[Mail2Chat CLI](https://github.com/jaredhendrickson13/mail2chat/blob/documentation/docs/CLI.md) as it is a great way to
+[Mail2Beyond CLI](https://github.com/jaredhendrickson13/mail2beyond/blob/documentation/docs/CLI.md) as it is a great way to
 learn how the components work.
 
 ## Running the Server
-If you've used the Mail2Chat CLI, you are likely already familiar with the concept of connectors, mappings, parsers and 
-listeners. These components also apply to the Mail2Chat Python package but are handled slightly differently than the
+If you've used the Mail2Beyond CLI, you are likely already familiar with the concept of connectors, mappings, parsers and 
+listeners. These components also apply to the Mail2Beyond Python package but are handled slightly differently than the
 CLI.
 
 ### Defining Connector Objects
@@ -18,18 +18,18 @@ connectors that you can use out of the box, or you can
 that redirect SMTP messages to Slack and Google Chat:
 
 ```python
-import mail2chat
+import mail2beyond
 
 ### DEFINE CONNECTORS
 # Use the bulit-in slack and google_chat connector modules to create connector objects
-google_chat_connector = mail2chat.connectors.google_chat.Connector(webhook_url="<YOUR GOOGLE CHAT WEBHOOK URL>")
-slack_connector = mail2chat.connectors.google_chat.Connector(webhook_url="<YOUR SLACK WEBHOOK URL>")
-void_connector = mail2chat.connectors.void.Connector()
+google_chat_connector = mail2beyond.connectors.google_chat.Connector(webhook_url="<YOUR GOOGLE CHAT WEBHOOK URL>")
+slack_connector = mail2beyond.connectors.google_chat.Connector(webhook_url="<YOUR SLACK WEBHOOK URL>")
+void_connector = mail2beyond.connectors.void.Connector()
 ```
 
 ### Defining Parser Classes
 Parsers allow you to control how the SMTP message's content body is represented before being redirected using a
-connector. If you've used the Mail2Chat CLI, you are likely aware that the CLI's default parser is the auto parser 
+connector. If you've used the Mail2Beyond CLI, you are likely aware that the CLI's default parser is the auto parser 
 that can dynamically choose the best parser based on the SMTP message's content-type header. The Python package requires
 the parser class to be specified explicitly, otherwise the BaseParser class is assumed which may have undesired results
 as it will leave the content body untouched. Parsers are often used to convert content which is not easily understood
@@ -38,24 +38,24 @@ classes or you can [write your own custom parser classes](#writing-custom-parser
 before mappings are defined. Below is an example of defining various parser classes that can be used in your mappings:
 
 ```python
-import mail2chat
+import mail2beyond
 
 ### DEFINE CONNECTORS
 # Use the bulit-in connector modules to create various connector objects
-google_chat_connector = mail2chat.connectors.google_chat.Connector(webhook_url="<YOUR GOOGLE CHAT WEBHOOK URL>")
-slack_connector = mail2chat.connectors.google_chat.Connector(webhook_url="<YOUR GOOGLE CHAT WEBHOOK URL>")
-void_connector = mail2chat.connectors.void.Connector()
+google_chat_connector = mail2beyond.connectors.google_chat.Connector(webhook_url="<YOUR GOOGLE CHAT WEBHOOK URL>")
+slack_connector = mail2beyond.connectors.google_chat.Connector(webhook_url="<YOUR GOOGLE CHAT WEBHOOK URL>")
+void_connector = mail2beyond.connectors.void.Connector()
 
 ### DEFINE PARSERS
 # Reference the auto parser class. This will attempt to automatically select the parser to use based on the content-type
 # of the received SMTP message. For example, the html parser will be chosen if the content type is text/html.
-auto_parser = mail2chat.parsers.auto.Parser
+auto_parser = mail2beyond.parsers.auto.Parser
 
 # Reference the html parser class. This will explicitly convert HTML content to a markdown representation.
-html_parser = mail2chat.parsers.html.Parser
+html_parser = mail2beyond.parsers.html.Parser
 
 # Reference the plain parser class. This will not apply any conversion or parsing the content body.
-plain_parser = mail2chat.parsers.plain.Parser
+plain_parser = mail2beyond.parsers.plain.Parser
 ```
 
 #### Notes
@@ -72,28 +72,28 @@ assume a default if no other mappings were matched. Connectors must be defined b
 must be defined before defining listeners. Below is an example of defining various mappings:
 
 ```python
-import mail2chat
+import mail2beyond
 
 ### DEFINE CONNECTORS
 # Use the bulit-in connector modules to create various connector objects
-google_chat_connector = mail2chat.connectors.google_chat.Connector(webhook_url="<YOUR GOOGLE CHAT WEBHOOK URL>")
-slack_connector = mail2chat.connectors.google_chat.Connector(webhook_url="<YOUR GOOGLE CHAT WEBHOOK URL>")
-void_connector = mail2chat.connectors.void.Connector()
+google_chat_connector = mail2beyond.connectors.google_chat.Connector(webhook_url="<YOUR GOOGLE CHAT WEBHOOK URL>")
+slack_connector = mail2beyond.connectors.google_chat.Connector(webhook_url="<YOUR GOOGLE CHAT WEBHOOK URL>")
+void_connector = mail2beyond.connectors.void.Connector()
 
 ### DEFINE PARSERS
 # Reference the auto parser class. This will attempt to automatically select the parser to use based on the content-type
 # of the received SMTP message. For example, the html parser will be chosen if the content type is text/html.
-auto_parser = mail2chat.parsers.auto.Parser
+auto_parser = mail2beyond.parsers.auto.Parser
 
 # Reference the html parser class. This will explicitly convert HTML content to a markdown representation.
-html_parser = mail2chat.parsers.html.Parser
+html_parser = mail2beyond.parsers.html.Parser
 
 # Reference the plain parser class. This will not apply any conversion or parsing the content body.
-plain_parser = mail2chat.parsers.plain.Parser
+plain_parser = mail2beyond.parsers.plain.Parser
 
 ### DEFINE MAPPINGS
 # Create a mapping that redirects SMTP messages with recipient 'google_chat@example.com' to Google Chat
-google_chat_mapping = mail2chat.framework.Mapping(
+google_chat_mapping = mail2beyond.framework.Mapping(
     pattern="^google_chat@example.com$", 
     field="to",
     connector=google_chat_connector,
@@ -101,7 +101,7 @@ google_chat_mapping = mail2chat.framework.Mapping(
 )
 
 # Create a mapping that redirects SMTP messages with sender 'slack@example.com' to Slack
-slack_mapping = mail2chat.framework.Mapping(
+slack_mapping = mail2beyond.framework.Mapping(
     pattern="^slack@example.com$", 
     field="from",
     connector=google_chat_connector,
@@ -109,45 +109,45 @@ slack_mapping = mail2chat.framework.Mapping(
 )
 
 # Create a default mapping that discards the SMTP message if it did not match any other mapping
-default_mapping = mail2chat.framework.Mapping(
+default_mapping = mail2beyond.framework.Mapping(
     pattern="default", 
     connector=void_connector
 )
 ```
 
 ### Defining Listener Objects
-Listeners are individual instances of the Mail2Chat SMTP server. Listeners define what address, port and protocol the 
+Listeners are individual instances of the Mail2Beyond SMTP server. Listeners define what address, port and protocol the 
 server will listen on. Commonly, users will configure a listener for SMTP and another for SMTPS. Additionally, 
 listeners can be configured to advertise or require the STARTTLS option to upgrade unencrypted connections to encrypted
 connections. SMTPS and STARTTLS are configured by creating an `SSLContext` object via Python's `ssl` package. Below is 
 an example of defining various listeners:
 
 ```python
-import mail2chat
+import mail2beyond
 import ssl
 import signal
 import logging
 
 ### DEFINE CONNECTORS
 # Use the bulit-in connector modules to create various connector objects
-google_chat_connector = mail2chat.connectors.google_chat.Connector(webhook_url="<YOUR GOOGLE CHAT WEBHOOK URL>")
-slack_connector = mail2chat.connectors.google_chat.Connector(webhook_url="<YOUR GOOGLE CHAT WEBHOOK URL>")
-void_connector = mail2chat.connectors.void.Connector()
+google_chat_connector = mail2beyond.connectors.google_chat.Connector(webhook_url="<YOUR GOOGLE CHAT WEBHOOK URL>")
+slack_connector = mail2beyond.connectors.google_chat.Connector(webhook_url="<YOUR GOOGLE CHAT WEBHOOK URL>")
+void_connector = mail2beyond.connectors.void.Connector()
 
 ### DEFINE PARSERS
 # Reference the auto parser class. This will attempt to automatically select the parser to use based on the content-type
 # of the received SMTP message. For example, the html parser will be chosen if the content type is text/html.
-auto_parser = mail2chat.parsers.auto.Parser
+auto_parser = mail2beyond.parsers.auto.Parser
 
 # Reference the html parser class. This will explicitly convert HTML content to a markdown representation.
-html_parser = mail2chat.parsers.html.Parser
+html_parser = mail2beyond.parsers.html.Parser
 
 # Reference the plain parser class. This will not apply any conversion or parsing the content body.
-plain_parser = mail2chat.parsers.plain.Parser
+plain_parser = mail2beyond.parsers.plain.Parser
 
 ### DEFINE MAPPINGS
 # Create a mapping that redirects SMTP messages with recipient 'google_chat@example.com' to Google Chat
-google_chat_mapping = mail2chat.framework.Mapping(
+google_chat_mapping = mail2beyond.framework.Mapping(
     pattern="^google_chat@example.com$", 
     field="to",
     connector=google_chat_connector,
@@ -155,7 +155,7 @@ google_chat_mapping = mail2chat.framework.Mapping(
 )
 
 # Create a mapping that redirects SMTP messages with sender 'slack@example.com' to Slack
-slack_mapping = mail2chat.framework.Mapping(
+slack_mapping = mail2beyond.framework.Mapping(
     pattern="^slack@example.com$", 
     field="from",
     connector=google_chat_connector,
@@ -163,7 +163,7 @@ slack_mapping = mail2chat.framework.Mapping(
 )
 
 # Create a default mapping that discards the SMTP message if it did not match any other mapping
-default_mapping = mail2chat.framework.Mapping(
+default_mapping = mail2beyond.framework.Mapping(
     pattern="default", 
     connector=void_connector
 )
@@ -176,7 +176,7 @@ context.set_ciphers("HIGH")
 context.minimum_version = ssl.TLSVersion.TLSv1_2
 
 # Define a normal SMTP listener
-smtp_listener = mail2chat.framework.Listener(
+smtp_listener = mail2beyond.framework.Listener(
     mappings=[google_chat_mapping, slack_mapping, default_mapping],
     address="localhost",
     port=25,
@@ -184,7 +184,7 @@ smtp_listener = mail2chat.framework.Listener(
 )
 
 # Define an SMTPS listener
-smtps_listener = mail2chat.framework.Listener(
+smtps_listener = mail2beyond.framework.Listener(
     mappings=[google_chat_mapping, slack_mapping, default_mapping],
     address="localhost",
     port=465,
@@ -200,21 +200,21 @@ signal.pause()
 
 ```
 
-From here, you can simply run your script and Mail2Chat will be listening for SMTP requests!
+From here, you can simply run your script and Mail2Beyond will be listening for SMTP requests!
 
 ## Writing Custom Connectors
-The Mail2Chat framework makes it easy to write your own API connectors to allow you to connect to your own APIs, or 
+The Mail2Beyond framework makes it easy to write your own API connectors to allow you to connect to your own APIs, or 
 virtually do anything you'd like with the received SMTP messages!
 
 ### Creating the Connector Class
-The Mail2Chat framework includes the BaseConnector class that includes all the necessary functions to make your custom
+The Mail2Beyond framework includes the BaseConnector class that includes all the necessary functions to make your custom
 connector plug and play. To get started, simply create a `Connector` class that extends the 
-`mail2chat.framework.BaseConnector` class and assign it a default name:
+`mail2beyond.framework.BaseConnector` class and assign it a default name:
 
 ```python
-import mail2chat
+import mail2beyond
 
-class Connector(mail2chat.framework.BaseConnector):
+class Connector(mail2beyond.framework.BaseConnector):
     name = "my_custom_connnector"
 ```
 
@@ -228,9 +228,9 @@ messsage that triggered the connector and the `log` attribute contains the logge
 within the Connector:
 
 ```python
-import mail2chat
+import mail2beyond
 
-class Connector(mail2chat.framework.BaseConnector):
+class Connector(mail2beyond.framework.BaseConnector):
     name = "my_custom_connnector"
 
     def pre_submit(self, parser):
@@ -239,7 +239,7 @@ class Connector(mail2chat.framework.BaseConnector):
         # Check that the required 'url' attribute is present
         if "url" not in self.config:
             self.log.error("an error occurred validating 'my_custom_connector's 'url' config value!")
-            raise mail2chat.framework.Error("connector 'my_custom_connector' requires config value for 'url'")
+            raise mail2beyond.framework.Error("connector 'my_custom_connector' requires config value for 'url'")
     
 ```
 
@@ -251,10 +251,10 @@ within the Connector. Additionally, the `config` attribute will contain any conf
 the desired action. Ideally, this `config` attribute will have been fully validated by the `pre_submit()` method.
 
 ```python
-import mail2chat
+import mail2beyond
 import requests
 
-class Connector(mail2chat.framework.BaseConnector):
+class Connector(mail2beyond.framework.BaseConnector):
     name = "my_custom_connnector"
 
     def pre_submit(self, parser):
@@ -264,7 +264,7 @@ class Connector(mail2chat.framework.BaseConnector):
         # Check that the required 'url' attribute is present
         if "url" not in self.config:
             self.log.error("an error occurred validating 'my_custom_connector's 'url' config value!")
-            raise mail2chat.framework.Error("connector 'my_custom_connector' requires config value for 'url'")
+            raise mail2beyond.framework.Error("connector 'my_custom_connector' requires config value for 'url'")
     
     def submit(self, parser):
         # Log informational event
@@ -289,7 +289,7 @@ class Connector(mail2chat.framework.BaseConnector):
             self.log.debug(f"connector 'my_custom_connector' responded with {resp.status_code} status {resp.text}")
         except Exception as req_err:
             self.log.error(f"connector 'my_custom_connector' failed '{req_err}'")
-            raise mail2chat.framework.Error(f"connector 'my_custom_connector' : {req_err}")
+            raise mail2beyond.framework.Error(f"connector 'my_custom_connector' : {req_err}")
         
         
     
@@ -300,12 +300,12 @@ Now that you've created your custom connector class, you can simply create an ob
 it in your mappings like any other connector!
 
 ```python
-import mail2chat
+import mail2beyond
 import requests
 import logging
 import signal
 
-class Connector(mail2chat.framework.BaseConnector):
+class Connector(mail2beyond.framework.BaseConnector):
     name = "my_custom_connnector"
 
     def pre_submit(self, parser):
@@ -315,7 +315,7 @@ class Connector(mail2chat.framework.BaseConnector):
         # Check that the required 'url' attribute is present
         if "url" not in self.config:
             self.log.error("an error occurred validating 'my_custom_connector's 'url' config value!")
-            raise mail2chat.framework.Error("connector 'my_custom_connector' requires config value for 'url'")
+            raise mail2beyond.framework.Error("connector 'my_custom_connector' requires config value for 'url'")
     
     def submit(self, parser):
         # Log informational event
@@ -340,16 +340,16 @@ class Connector(mail2chat.framework.BaseConnector):
             self.log.debug(f"connector 'my_custom_connector' responded with {resp.status_code} status {resp.text}")
         except Exception as req_err:
             self.log.error(f"connector 'my_custom_connector' failed '{req_err}'")
-            raise mail2chat.framework.Error(f"connector 'my_custom_connector' : {req_err}")
+            raise mail2beyond.framework.Error(f"connector 'my_custom_connector' : {req_err}")
 
 # Create a connector object using your custom connector class
 custom_connecter = Connector(url="http://myapi.example.com")
 
 # Create a default mapping that uses your custom connector
-default_mapping = mail2chat.framework.Mapping(pattern="default", connector=custom_connecter)
+default_mapping = mail2beyond.framework.Mapping(pattern="default", connector=custom_connecter)
 
 # Create and listener that uses the mapping referencing your custom connector
-smtp_listener = mail2chat.framework.Listener(
+smtp_listener = mail2beyond.framework.Listener(
     mappings=[default_mapping],
     address="localhost",
     port=25,
@@ -366,18 +366,18 @@ Now you have a listener that will redirect SMTP messages to your API using a cus
 
 ## Writing Custom Parsers
 In some cases, you may need the SMTP message's content body to be parsed into a very specific format. Luckily the 
-Mail2Chat framework makes this super simple to do. Custom parser classes can be written to allow you to parse the 
+Mail2Beyond framework makes this super simple to do. Custom parser classes can be written to allow you to parse the 
 content body however you'd like!
 
 ### Creating the Parser Class
-The Mail2Chat framework includes the BaseParser class that includes all the functions necessary to make your
+The Mail2Beyond framework includes the BaseParser class that includes all the functions necessary to make your
 custom parser plug and play. To get started, simply create a `Parser` class that extends the 
-`mail2chat.framework.BaseParser` class and assign it a default name:
+`mail2beyond.framework.BaseParser` class and assign it a default name:
 
 ```python
-import mail2chat
+import mail2beyond
 
-class Parser(mail2chat.framework.BaseParser):
+class Parser(mail2beyond.framework.BaseParser):
     name = "my_custom_parser"
 ```
 
@@ -388,9 +388,9 @@ with an encoding like Base64, the content will _already be decoded_ at this stag
 overwritten to further parse/filter the content before it handed to a connector:
 
 ```python
-import mail2chat
+import mail2beyond
 
-class Parser(mail2chat.framework.BaseParser):
+class Parser(mail2beyond.framework.BaseParser):
     name = "my_custom_parser"
 
     def parse_content(self):
@@ -413,11 +413,11 @@ Now that you've created your custom parser class, you can simply specify your cu
 like any other parser class!
 
 ```python
-import mail2chat
+import mail2beyond
 import logging
 import signal
 
-class Parser(mail2chat.framework.BaseParser):
+class Parser(mail2beyond.framework.BaseParser):
     name = "my_custom_parser"
 
     def parse_content(self):
@@ -434,13 +434,13 @@ class Parser(mail2chat.framework.BaseParser):
         return content
 
 # Create a connector object using your custom connector class
-void_connector = mail2chat.connectors.void.Connector()
+void_connector = mail2beyond.connectors.void.Connector()
 
 # Create a default mapping that uses your custom connector
-default_mapping = mail2chat.framework.Mapping(pattern="default", connector=void_connector, parser=Parser)
+default_mapping = mail2beyond.framework.Mapping(pattern="default", connector=void_connector, parser=Parser)
 
 # Create and listener that uses the mapping referencing your custom connector
-smtp_listener = mail2chat.framework.Listener(
+smtp_listener = mail2beyond.framework.Listener(
     mappings=[default_mapping],
     address="localhost",
     port=25,

@@ -1,6 +1,6 @@
-Mail2Chat Command Line Interface
+Mail2Beyond Command Line Interface
 ================================
-Mail2Chat can be used entirely by CLI. After installing Mail2Chat, you will have access to the `mail2chat` command line
+Mail2Beyond can be used entirely by CLI. After installing Mail2Beyond, you will have access to the `mail2beyond` command line
 tool. The CLI allows you define listeners, connectors and mappings using a JSON or YAML formatted configuration file.
 
 ## Arguments
@@ -8,18 +8,18 @@ tool. The CLI allows you define listeners, connectors and mappings using a JSON 
 | Argument               | Required | Description                                                                   |
 |------------------------|:---------|-------------------------------------------------------------------------------|
 | `--config (-c) <FILE>` | Yes      | Specifies which configuration file to load. This must be a JSON or YAML file. |
-| `--version (-V)`       | No       | Prints the version of mail2chat installed.                                    |
+| `--version (-V)`       | No       | Prints the version of mail2beyond installed.                                    |
 | `--verbose (-v)`       | No       | Enables verbose logging.                                                      |
 | `--help (-h)`          | No       | Prints the help page.                                                         |
 
 ## Configuration
-A configuration file must be written before `mail2chat` is started. It may also be helpful to check out the 
-[examples on GitHub](https://github.com/jaredhendrickson13/mail2chat/tree/master/examples/configs). Configuration 
+A configuration file must be written before `mail2beyond` is started. It may also be helpful to check out the 
+[examples on GitHub](https://github.com/jaredhendrickson13/mail2beyond/tree/master/examples/configs). Configuration 
 requirements and options are:
 
 -----------------------------------------------------------------------------------------------------------------------
 ### `listeners`
-A list of listeners for mail2chat to use. At least one listener must be configured. Each listener has the following 
+A list of listeners for mail2beyond to use. At least one listener must be configured. Each listener has the following 
 options available:
 
 - **address**
@@ -72,7 +72,7 @@ options available:
   `enable_smtps` or `enable_starttls` is set to `true`. 
 
 ### `connectors`
-A list of connectors for mail2chat to enable. At least one connector item must be configured. Each connector has the 
+A list of connectors for mail2beyond to enable. At least one connector item must be configured. Each connector has the 
 following options available:
 
 - **name**
@@ -136,7 +136,7 @@ The `void` connector module simply discards the received SMTP message. This conn
 configuration options. 
 
 ### `smtp`
-The `smtp` connector module forwards received SMTP messages to an upstream SMTP server. On its own, Mail2Chat does not
+The `smtp` connector module forwards received SMTP messages to an upstream SMTP server. On its own, Mail2Beyond does not
 actually deliver the SMTP message to the recipient's mailbox. This connector module enables that functionality but 
 requires an upstream SMTP to deliver the message. Available options for this module are:
 
@@ -192,5 +192,5 @@ must be created for your space beforehand. Available options for this module are
 ## Starting the Server
 Once you have your configuration file written, you can start the server by running the following command:
 ```commandline
-mail2chat --config /path/to/your/config.yml
+mail2beyond --config /path/to/your/config.yml
 ```

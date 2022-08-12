@@ -2,7 +2,7 @@
 Module that contains a parser that automatically selects another parser based on the mail's content-type header.
 """
 
-from mail2chat import framework
+from mail2beyond import framework
 from . import plain, html
 
 

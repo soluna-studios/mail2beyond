@@ -1,4 +1,4 @@
-"""Contains the base framework classes for mail2chat."""
+"""Contains the base framework classes for mail2beyond."""
 
 import email
 import inspect
@@ -11,7 +11,7 @@ from aiosmtpd.controller import Controller
 
 
 class Error(BaseException):
-    """Error object used by mail2chat"""
+    """Error object used by mail2beyond"""
     def __init__(self, message):
         super().__init__(message)
 
@@ -56,7 +56,7 @@ class Listener:
     def start(self):
         """Start the listener."""
         self.controller.start()
-        self.log.info(f"mail2chat started listening on {self.address}:{self.port}")
+        self.log.info(f"mail2beyond started listening on {self.address}:{self.port}")
 
     def setup_controller(self):
         """Sets up the controller object with the current address, port and options."""
@@ -356,7 +356,7 @@ class Mapping:
     @connector.setter
     def connector(self, value):
         """Setter for the connector property."""
-        # Require connector to have a base class of mail2chat.framework.BaseConnector
+        # Require connector to have a base class of mail2beyond.framework.BaseConnector
         if value.__class__.__base__ == BaseConnector:
             self._connector = value
         else:
@@ -370,7 +370,7 @@ class Mapping:
     @parser.setter
     def parser(self, value):
         """Setter for the parser property."""
-        # Require parser to have a base class of mail2chat.framework.BaseParser
+        # Require parser to have a base class of mail2beyond.framework.BaseParser
         if inspect.isclass(value) and hasattr(value, "parse_content"):
             self._parser = value
         else:
@@ -393,7 +393,7 @@ class Mapping:
 
 class BaseConnector:
     """
-    Creates the Mail2ChatConnect base class to be extended by configurable child classes. This establishes standard
+    Creates the Mail2BeyondConnect base class to be extended by configurable child classes. This establishes standard
     methods and attributes for creating plugin API connectors.
     """
     # Attributes
@@ -487,7 +487,7 @@ class BaseParser:
     def __init__(self, mail, **kwargs):
         """
         Initialize the Parser object with required attributes.
-        @param mail: (mail2chat.framework.Email) the email object created by mail2chat.framework.Listener.handle_DATA
+        @param mail: (mail2beyond.framework.Email) the email object created by mail2beyond.framework.Listener.handle_DATA
         """
         self.mail = mail
         self.config = kwargs
@@ -514,9 +514,9 @@ class BaseParser:
     @mail.setter
     def mail(self, value):
         """Setter for the parser property."""
-        # Ensure value is a mail2chat.framework.Email object
+        # Ensure value is a mail2beyond.framework.Email object
         if not isinstance(value, Email):
-            raise Error("'parser' must be type 'mail2chat.framework.Email'")
+            raise Error("'parser' must be type 'mail2beyond.framework.Email'")
 
         self._mail = value
 

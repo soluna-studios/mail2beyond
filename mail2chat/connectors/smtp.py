@@ -3,7 +3,7 @@
 import smtplib
 import socket
 
-from mail2chat import framework
+from mail2beyond import framework
 
 
 class Connector(framework.BaseConnector):
