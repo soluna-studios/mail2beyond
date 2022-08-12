@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>mail2beyond.tools API documentation</title>
+<meta name="description" content="Module that includes tool functions that primarily assist the CLI and unit tests, but may be useful to others." />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>mail2beyond.tools</code></h1>
+</header>
+<section id="section-intro">
+<p>Module that includes tool functions that primarily assist the CLI and unit tests, but may be useful to others.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Module that includes tool functions that primarily assist the CLI and unit tests, but may be useful to others.
+&#34;&#34;&#34;
+
+import inspect
+import logging
+import pathlib
+import ssl
+
+from OpenSSL import crypto
+
+from . import connectors
+from . import parsers
+from . import framework
+
+
+def get_connectors_from_dict(config: dict):
+    &#34;&#34;&#34;
+    Converts a dictionary representations of connectors to connector objects.
+    Args:
+        config (dict): A dictionary representation of different connectors to create.
+
+    Raises:
+        mail2beyond.framework.Error: When a validation error occurs.
+
+    Returns:
+        list: A list of Connector objects that can be used.
+    &#34;&#34;&#34;
+    # Create a list to store the created connector objects
+    valid_connectors = []
+    available_connectors = dict(inspect.getmembers(connectors, inspect.ismodule))
+
+    # Require connectors config to be defined
+    if &#34;connectors&#34; not in config.keys():
+        raise framework.Error(&#34;&#39;connectors&#39; value is required&#34;)
+
+    # Require connectors config to be a list
+    if not isinstance(config.get(&#34;connectors&#34;), list):
+        raise framework.Error(&#34;&#39;connectors&#39; value must be type list&#34;)
+
+    # Require at least one connector
+    if len(config.get(&#34;connectors&#34;)) == 0:
+        raise framework.Error(&#34;at least one &#39;connectors&#39; item is required&#34;)
+
+    # Loop through each connector in the configuration
+    for connector in config.get(&#34;connectors&#34;):
+        # Require connector definition to be a dict
+        if not isinstance(connector, dict):
+            raise framework.Error(&#34;&#39;connectors&#39; items must be type dict&#34;)
+
+        # Require connector name to be defined
+        if &#34;name&#34; not in connector.keys():
+            raise framework.Error(&#34;&#39;connectors&#39; items must contain &#39;name&#39; value&#34;)
+
+        # Require connector names to be unique
+        for obj in valid_connectors:
+            if connector[&#34;name&#34;] == obj.name:
+                raise framework.Error(f&#34;multiple &#39;connectors&#39; items assigned name &#39;{obj.name}&#39;&#34;)
+
+        # Require connector type to be defined
+        if &#34;module&#34; not in connector.keys():
+            raise framework.Error(&#34;&#39;connectors&#39; configuration items must contain &#39;module&#39; value&#34;)
+
+        # Require connector type to be known
+        if connector[&#34;module&#34;] not in available_connectors:
+            raise framework.Error(&#34;&#39;connectors&#39; configuration items must contain &#39;module&#39; value&#34;)
+
+        # Get the connector module that matches this connector
+        connector_module = available_connectors.get(connector[&#34;module&#34;])
+
+        # Add this connector, it is valid
+        connector_obj = connector_module.Connector()
+        connector_obj.name = connector.get(&#34;name&#34;)
+        connector_obj.config = connector.get(&#34;config&#34;, {})
+
+        valid_connectors.append(connector_obj)
+
+    # Return our connector objects
+    return valid_connectors
+
+
+def get_connector_by_name(name, connector_objs):
+    &#34;&#34;&#34;
+    Gets the connector with a specific name from a list of Connector objects.
+
+    Args:
+        name (str): The name of the connector to find.
+        connector_objs (list): A list of Connector objects to search.
+
+    Returns:
+        mail2beyond.framework.BaseConnector: The Connector object with the specified name if one was found.
+        None: When no Connector object was found with the specified name.
+    &#34;&#34;&#34;
+    # Loop through each connector and return the connector with the specified name
+    for connector in connector_objs:
+        if connector.name == name:
+            return connector
+
+    return None
+
+
+def get_mappings_from_dict(config: dict):
+    &#34;&#34;&#34;
+    Converts a dictionary representations of mappings to Mapping objects. Since Mapping objects are dependent on
+    a Connector object, the dictionary must also include representations of Connector objects to use.
+
+    Args:
+        config (dict): A dictionary representation of different mappings to create.
+
+    Raises:
+        mail2beyond.framework.Error: When a validation error occurs.
+
+    Returns:
+        list: A list of Mapping objects that can be used.
+    &#34;&#34;&#34;
+    # Variables
+    config_connectors = get_connectors_from_dict(config)
+    available_parsers = dict(inspect.getmembers(parsers, inspect.ismodule))
+    valid_mappings = []
+
+    # Require mappings config to be defined
+    if &#34;mappings&#34; not in config.keys():
+        raise framework.Error(&#34;&#39;mappings&#39; value is required&#34;)
+
+    # Require mappings config to be a list
+    if not isinstance(config.get(&#34;mappings&#34;), list):
+        raise framework.Error(&#34;&#39;mappings&#39; value must be type list&#34;)
+
+    # Require at least one mapping
+    if len(config.get(&#34;mappings&#34;)) == 0:
+        raise framework.Error(&#34;at least one &#39;mappings&#39; item is required&#34;)
+
+    # Loop through each mapping in the configuration
+    for mapping in config.get(&#34;mappings&#34;):
+        # Require mapping definition to be a dict
+        if not isinstance(mapping, dict):
+            raise framework.Error(&#34;&#39;mappings&#39; items must be type dict&#34;)
+
+        # Require mapping connector to be defined
+        if &#34;connector&#34; not in mapping.keys():
+            raise framework.Error(&#34;&#39;mappings&#39; items must contain &#39;connector&#39; value&#34;)
+
+        # Get this mapping&#39;s connector
+        connector = get_connector_by_name(mapping.get(&#34;connector&#34;), config_connectors)
+
+        # Require this mapping&#39;s connector to exist
+        if not connector:
+            raise framework.Error(f&#34;&#39;mappings&#39; item references undefined connector &#39;{mapping[&#39;connector&#39;]}&#39;&#34;)
+
+        # Replace the mapping&#39;s connector item with the actual object so it can be passed in with kwargs below
+        mapping[&#34;connector&#34;] = connector
+
+        # Ensure parser is a known
+        parser = mapping.get(&#34;parser&#34;, &#34;auto&#34;)
+        if parser not in available_parsers:
+            raise framework.Error(f&#34;&#39;mappings&#39; item references undefined parser module &#39;{parser}&#39;&#34;)
+
+        # Replace the mapping&#39;s parser item with the actual Parser class so it can be passed into with kwargs below
+        mapping[&#34;parser&#34;] = available_parsers.get(parser).Parser
+
+        # Add this mapping, it is valid
+        mapping_obj = framework.Mapping(**mapping)
+        valid_mappings.append(mapping_obj)
+
+    # Return our connector objects
+    return valid_mappings
+
+
+def get_listeners_from_dict(config: dict, log_level: int = logging.NOTSET):
+    &#34;&#34;&#34;
+    Converts a dictionary representations of listeners to Listener objects. Since Listener objects are dependent on
+    a Mapping objects, and Mapping objects are dependent on Connector objects, the dictionary must also include
+    representations of both Mapping and Connector objects to use.
+
+    Args:
+        config (dict): A dictionary representation of different mappings to create.
+        log_level (int): Sets the logging level the Listeners&#39; Logger will start logging at. See
+            https://docs.python.org/3/library/logging.html#logging-levels
+
+    Raises:
+        mail2beyond.framework.Error: When a validation error occurs.
+
+    Returns:
+        list: A list of Listener objects that can be used.
+    &#34;&#34;&#34;
+    # Validating listeners from configuration requires many conditions because there are many options.
+    # In the future, consider grouping config validation into it&#39;s own class with getters and setters.
+    # pylint: disable=too-many-branches,too-many-statements
+
+    # Constants
+    tls_protocols = {
+        &#34;tls1&#34;: ssl.TLSVersion.TLSv1,
+        &#34;tls1_1&#34;: ssl.TLSVersion.TLSv1_1,
+        &#34;tls1_2&#34;: ssl.TLSVersion.TLSv1_2,
+        &#34;tls1_3&#34;: ssl.TLSVersion.TLSv1_3
+    }
+    enable_smtps_default = False
+    enable_starttls_default = False
+    require_starttls_default = False
+    tls_minimum_version_options = tls_protocols.keys()
+    tls_minimum_version_default = &#34;tls1_2&#34;
+
+    # Variables
+    mappings = get_mappings_from_dict(config)
+    valid_listeners = []
+
+    # Require listeners config to be defined.
+    if &#34;listeners&#34; not in config.keys():
+        raise framework.Error(&#34;&#39;listeners&#39; value is required&#34;)
+
+    # Require listeners config to be a list
+    if not isinstance(config.get(&#34;listeners&#34;), list):
+        raise framework.Error(&#34;&#39;listeners&#39; value must be type list&#34;)
+
+    # Require at least one listener
+    if len(config.get(&#34;listeners&#34;)) == 0:
+        raise framework.Error(&#34;at least one &#39;listeners&#39; item is required&#34;)
+
+    # Loop through each listener and ensure it has a valid configuration.
+    for listener in config.get(&#34;listeners&#34;):
+        # Reset any previous SSLContext
+        context = None
+        tls_listener = False
+
+        # Require listener definition to be a dict
+        if not isinstance(listener, dict):
+            raise framework.Error(&#34;&#39;listeners&#39; items must be type dict&#34;)
+
+        # Ensure listener has an address and port set. The Listener object will validate further upon creation.
+        if &#34;address&#34; not in listener.keys():
+            raise framework.Error(&#34;&#39;listeners&#39; items must contain &#39;address&#39; value&#34;)
+
+        # Ensure listener has an address and port set. The Listener object will validate further upon creation.
+        if &#34;port&#34; not in listener.keys():
+            raise framework.Error(&#34;&#39;listeners&#39; items must contain &#39;port&#39; value&#34;)
+
+        # When &#39;enable_smtps&#39; is set, ensure it is a bool
+        if not isinstance(listener.get(&#34;enable_smtps&#34;, enable_smtps_default), bool):
+            raise framework.Error(&#34;&#39;enable_smtps&#39; items must be type bool&#34;)
+
+        # Mark this as a TLS enabled listen if SMTPS is enabled
+        if listener.get(&#34;enable_smtps&#34;, enable_smtps_default):
+            tls_listener = True
+
+        # When &#39;enable_starttls&#39; is set, validate associated fields
+        if &#34;enable_starttls&#34; in listener.keys():
+            # Mark this as a TLS enabled listener
+            tls_listener = True
+
+            # Ensure &#39;enable_smtps&#39; was not also enabled
+            if listener.get(&#34;enable_smtps&#34;, enable_smtps_default):
+                raise framework.Error(
+                    &#34;&#39;listeners&#39; items &#39;enable_starttls&#39; and &#39;enable_smtps&#39; cannot be active on the same listener&#34;
+                )
+
+            # Ensure it is a bool
+            if not isinstance(listener.get(&#34;enable_starttls&#34;, enable_starttls_default), bool):
+                raise framework.Error(&#34;&#39;listeners&#39; item &#39;enable_starttls&#39; value must be type bool&#34;)
+
+            # Check for &#39;require_starttls&#39; option and ensure it is a bool
+            if not isinstance(listener.get(&#34;require_starttls&#34;, require_starttls_default), bool):
+                raise framework.Error(&#34;&#39;listeners&#39; item &#39;require_starttls&#39; value must be type bool&#34;)
+
+        # If this was marked as a TLS listener, validate TLS configuration
+        if tls_listener:
+            # Require the minimum_tls_protocol to be known
+            if listener.get(&#34;minimum_tls_protocol&#34;, tls_minimum_version_default) not in tls_minimum_version_options:
+                raise framework.Error(&#34;&#39;listeners&#39; item &#39;minimum_tls_protocol&#39; value is not known protocol&#34;)
+
+            # Require a TLS certificate and key
+            for field in [&#34;tls_cert&#34;, &#34;tls_key&#34;]:
+                if field not in listener.keys():
+                    raise framework.Error(f&#34;&#39;listeners&#39; item &#39;{field}&#39; is required to use stmps or starttls&#34;)
+
+                # Ensure field is string
+                if not isinstance(listener.get(field), str):
+                    raise framework.Error(f&#34;&#39;listeners&#39; item &#39;{field}&#39; value must be type str&#34;)
+
+                # Ensure field is an existing filepath
+                if not pathlib.Path(listener.get(field)).exists():
+                    raise framework.Error(f&#34;&#39;listeners&#39; item &#39;{field}&#39; is not existing file path&#34;)
+
+            # Create the SSLContext for this listener
+            context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+            context.load_cert_chain(listener.get(&#34;tls_cert&#34;), listener.get(&#34;tls_key&#34;))
+            context.set_ciphers(&#34;HIGH&#34;)
+            context.minimum_version = tls_protocols[listener.get(&#34;tls_minimum_version&#34;, tls_minimum_version_default)]
+
+        # Create an SMTPS listener if configured
+        if listener.get(&#34;enable_smtps&#34;, enable_smtps_default):
+            valid_listeners.append(
+                framework.Listener(
+                    mappings=mappings,
+                    address=listener.get(&#34;address&#34;),
+                    port=listener.get(&#34;port&#34;),
+                    tls_context=context,
+                    enable_starttls=False,
+                    require_starttls=False,
+                    log_level=log_level
+                )
+            )
+        # Create a STARTTLS listener if configured
+        elif listener.get(&#34;enable_starttls&#34;, enable_starttls_default):
+            valid_listeners.append(
+                framework.Listener(
+                    mappings=mappings,
+                    address=listener.get(&#34;address&#34;),
+                    port=listener.get(&#34;port&#34;),
+                    tls_context=context,
+                    enable_starttls=True,
+                    require_starttls=listener.get(&#34;require_starttls&#34;, require_starttls_default),
+                    log_level=log_level
+                )
+            )
+        # Create normal SMTP listener otherwise
+        else:
+            valid_listeners.append(
+                framework.Listener(
+                    mappings=mappings,
+                    address=listener.get(&#34;address&#34;),
+                    port=listener.get(&#34;port&#34;),
+                    log_level=log_level
+                )
+            )
+
+    # Return the validated listeners
+    return valid_listeners
+
+
+def generate_tls_certificate(cert_path: str, key_path: str):
+    &#34;&#34;&#34;
+    Generates a self-signed certificate and private key at a specified file path. This is primarily used for unit tests,
+    but could be useful elsewhere too.
+    Args:
+        cert_path (str): The file path to write the generated certificate file to.
+        key_path (str): The file path to write the generated key file to.
+    &#34;&#34;&#34;
+
+    # Generate private key
+    key = crypto.PKey()
+    key.generate_key(crypto.TYPE_RSA, 2048)
+
+    # Define self-signed certificate
+    cert = crypto.X509()
+    cert.get_subject().CN = &#34;example.com&#34;
+    cert.set_serial_number(0)
+    cert.gmtime_adj_notBefore(0)
+    cert.gmtime_adj_notAfter(365000)
+    cert.set_issuer(cert.get_subject())
+    cert.set_pubkey(key)
+    cert.sign(key, &#39;sha512&#39;)
+
+    # Write the certificate and key to file
+    with open(cert_path, &#34;wt&#34;, encoding=&#34;utf-8&#34;) as cert_file:
+        cert_file.write(crypto.dump_certificate(crypto.FILETYPE_PEM, cert).decode(&#34;utf-8&#34;))
+    with open(key_path, &#34;wt&#34;, encoding=&#34;utf-8&#34;) as key_file:
+        key_file.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, key).decode(&#34;utf-8&#34;))</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="mail2beyond.tools.generate_tls_certificate"><code class="name flex">
+<span>def <span class="ident">generate_tls_certificate</span></span>(<span>cert_path: str, key_path: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generates a self-signed certificate and private key at a specified file path. This is primarily used for unit tests,
+but could be useful elsewhere too.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>cert_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>The file path to write the generated certificate file to.</dd>
+<dt><strong><code>key_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>The file path to write the generated key file to.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_tls_certificate(cert_path: str, key_path: str):
+    &#34;&#34;&#34;
+    Generates a self-signed certificate and private key at a specified file path. This is primarily used for unit tests,
+    but could be useful elsewhere too.
+    Args:
+        cert_path (str): The file path to write the generated certificate file to.
+        key_path (str): The file path to write the generated key file to.
+    &#34;&#34;&#34;
+
+    # Generate private key
+    key = crypto.PKey()
+    key.generate_key(crypto.TYPE_RSA, 2048)
+
+    # Define self-signed certificate
+    cert = crypto.X509()
+    cert.get_subject().CN = &#34;example.com&#34;
+    cert.set_serial_number(0)
+    cert.gmtime_adj_notBefore(0)
+    cert.gmtime_adj_notAfter(365000)
+    cert.set_issuer(cert.get_subject())
+    cert.set_pubkey(key)
+    cert.sign(key, &#39;sha512&#39;)
+
+    # Write the certificate and key to file
+    with open(cert_path, &#34;wt&#34;, encoding=&#34;utf-8&#34;) as cert_file:
+        cert_file.write(crypto.dump_certificate(crypto.FILETYPE_PEM, cert).decode(&#34;utf-8&#34;))
+    with open(key_path, &#34;wt&#34;, encoding=&#34;utf-8&#34;) as key_file:
+        key_file.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, key).decode(&#34;utf-8&#34;))</code></pre>
+</details>
+</dd>
+<dt id="mail2beyond.tools.get_connector_by_name"><code class="name flex">
+<span>def <span class="ident">get_connector_by_name</span></span>(<span>name, connector_objs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Gets the connector with a specific name from a list of Connector objects.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the connector to find.</dd>
+<dt><strong><code>connector_objs</code></strong> :&ensp;<code>list</code></dt>
+<dd>A list of Connector objects to search.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code><a title="mail2beyond.framework.BaseConnector" href="framework.html#mail2beyond.framework.BaseConnector">BaseConnector</a></code></dt>
+<dd>The Connector object with the specified name if one was found.</dd>
+<dt><code>None</code></dt>
+<dd>When no Connector object was found with the specified name.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_connector_by_name(name, connector_objs):
+    &#34;&#34;&#34;
+    Gets the connector with a specific name from a list of Connector objects.
+
+    Args:
+        name (str): The name of the connector to find.
+        connector_objs (list): A list of Connector objects to search.
+
+    Returns:
+        mail2beyond.framework.BaseConnector: The Connector object with the specified name if one was found.
+        None: When no Connector object was found with the specified name.
+    &#34;&#34;&#34;
+    # Loop through each connector and return the connector with the specified name
+    for connector in connector_objs:
+        if connector.name == name:
+            return connector
+
+    return None</code></pre>
+</details>
+</dd>
+<dt id="mail2beyond.tools.get_connectors_from_dict"><code class="name flex">
+<span>def <span class="ident">get_connectors_from_dict</span></span>(<span>config: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Converts a dictionary representations of connectors to connector objects.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>config</code></strong> :&ensp;<code>dict</code></dt>
+<dd>A dictionary representation of different connectors to create.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="mail2beyond.framework.Error" href="framework.html#mail2beyond.framework.Error">Error</a></code></dt>
+<dd>When a validation error occurs.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list</code></dt>
+<dd>A list of Connector objects that can be used.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_connectors_from_dict(config: dict):
+    &#34;&#34;&#34;
+    Converts a dictionary representations of connectors to connector objects.
+    Args:
+        config (dict): A dictionary representation of different connectors to create.
+
+    Raises:
+        mail2beyond.framework.Error: When a validation error occurs.
+
+    Returns:
+        list: A list of Connector objects that can be used.
+    &#34;&#34;&#34;
+    # Create a list to store the created connector objects
+    valid_connectors = []
+    available_connectors = dict(inspect.getmembers(connectors, inspect.ismodule))
+
+    # Require connectors config to be defined
+    if &#34;connectors&#34; not in config.keys():
+        raise framework.Error(&#34;&#39;connectors&#39; value is required&#34;)
+
+    # Require connectors config to be a list
+    if not isinstance(config.get(&#34;connectors&#34;), list):
+        raise framework.Error(&#34;&#39;connectors&#39; value must be type list&#34;)
+
+    # Require at least one connector
+    if len(config.get(&#34;connectors&#34;)) == 0:
+        raise framework.Error(&#34;at least one &#39;connectors&#39; item is required&#34;)
+
+    # Loop through each connector in the configuration
+    for connector in config.get(&#34;connectors&#34;):
+        # Require connector definition to be a dict
+        if not isinstance(connector, dict):
+            raise framework.Error(&#34;&#39;connectors&#39; items must be type dict&#34;)
+
+        # Require connector name to be defined
+        if &#34;name&#34; not in connector.keys():
+            raise framework.Error(&#34;&#39;connectors&#39; items must contain &#39;name&#39; value&#34;)
+
+        # Require connector names to be unique
+        for obj in valid_connectors:
+            if connector[&#34;name&#34;] == obj.name:
+                raise framework.Error(f&#34;multiple &#39;connectors&#39; items assigned name &#39;{obj.name}&#39;&#34;)
+
+        # Require connector type to be defined
+        if &#34;module&#34; not in connector.keys():
+            raise framework.Error(&#34;&#39;connectors&#39; configuration items must contain &#39;module&#39; value&#34;)
+
+        # Require connector type to be known
+        if connector[&#34;module&#34;] not in available_connectors:
+            raise framework.Error(&#34;&#39;connectors&#39; configuration items must contain &#39;module&#39; value&#34;)
+
+        # Get the connector module that matches this connector
+        connector_module = available_connectors.get(connector[&#34;module&#34;])
+
+        # Add this connector, it is valid
+        connector_obj = connector_module.Connector()
+        connector_obj.name = connector.get(&#34;name&#34;)
+        connector_obj.config = connector.get(&#34;config&#34;, {})
+
+        valid_connectors.append(connector_obj)
+
+    # Return our connector objects
+    return valid_connectors</code></pre>
+</details>
+</dd>
+<dt id="mail2beyond.tools.get_listeners_from_dict"><code class="name flex">
+<span>def <span class="ident">get_listeners_from_dict</span></span>(<span>config: dict, log_level: int = 0)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Converts a dictionary representations of listeners to Listener objects. Since Listener objects are dependent on
+a Mapping objects, and Mapping objects are dependent on Connector objects, the dictionary must also include
+representations of both Mapping and Connector objects to use.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>config</code></strong> :&ensp;<code>dict</code></dt>
+<dd>A dictionary representation of different mappings to create.</dd>
+<dt><strong><code>log_level</code></strong> :&ensp;<code>int</code></dt>
+<dd>Sets the logging level the Listeners' Logger will start logging at. See
+<a href="https://docs.python.org/3/library/logging.html#logging-levels">https://docs.python.org/3/library/logging.html#logging-levels</a></dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="mail2beyond.framework.Error" href="framework.html#mail2beyond.framework.Error">Error</a></code></dt>
+<dd>When a validation error occurs.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list</code></dt>
+<dd>A list of Listener objects that can be used.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_listeners_from_dict(config: dict, log_level: int = logging.NOTSET):
+    &#34;&#34;&#34;
+    Converts a dictionary representations of listeners to Listener objects. Since Listener objects are dependent on
+    a Mapping objects, and Mapping objects are dependent on Connector objects, the dictionary must also include
+    representations of both Mapping and Connector objects to use.
+
+    Args:
+        config (dict): A dictionary representation of different mappings to create.
+        log_level (int): Sets the logging level the Listeners&#39; Logger will start logging at. See
+            https://docs.python.org/3/library/logging.html#logging-levels
+
+    Raises:
+        mail2beyond.framework.Error: When a validation error occurs.
+
+    Returns:
+        list: A list of Listener objects that can be used.
+    &#34;&#34;&#34;
+    # Validating listeners from configuration requires many conditions because there are many options.
+    # In the future, consider grouping config validation into it&#39;s own class with getters and setters.
+    # pylint: disable=too-many-branches,too-many-statements
+
+    # Constants
+    tls_protocols = {
+        &#34;tls1&#34;: ssl.TLSVersion.TLSv1,
+        &#34;tls1_1&#34;: ssl.TLSVersion.TLSv1_1,
+        &#34;tls1_2&#34;: ssl.TLSVersion.TLSv1_2,
+        &#34;tls1_3&#34;: ssl.TLSVersion.TLSv1_3
+    }
+    enable_smtps_default = False
+    enable_starttls_default = False
+    require_starttls_default = False
+    tls_minimum_version_options = tls_protocols.keys()
+    tls_minimum_version_default = &#34;tls1_2&#34;
+
+    # Variables
+    mappings = get_mappings_from_dict(config)
+    valid_listeners = []
+
+    # Require listeners config to be defined.
+    if &#34;listeners&#34; not in config.keys():
+        raise framework.Error(&#34;&#39;listeners&#39; value is required&#34;)
+
+    # Require listeners config to be a list
+    if not isinstance(config.get(&#34;listeners&#34;), list):
+        raise framework.Error(&#34;&#39;listeners&#39; value must be type list&#34;)
+
+    # Require at least one listener
+    if len(config.get(&#34;listeners&#34;)) == 0:
+        raise framework.Error(&#34;at least one &#39;listeners&#39; item is required&#34;)
+
+    # Loop through each listener and ensure it has a valid configuration.
+    for listener in config.get(&#34;listeners&#34;):
+        # Reset any previous SSLContext
+        context = None
+        tls_listener = False
+
+        # Require listener definition to be a dict
+        if not isinstance(listener, dict):
+            raise framework.Error(&#34;&#39;listeners&#39; items must be type dict&#34;)
+
+        # Ensure listener has an address and port set. The Listener object will validate further upon creation.
+        if &#34;address&#34; not in listener.keys():
+            raise framework.Error(&#34;&#39;listeners&#39; items must contain &#39;address&#39; value&#34;)
+
+        # Ensure listener has an address and port set. The Listener object will validate further upon creation.
+        if &#34;port&#34; not in listener.keys():
+            raise framework.Error(&#34;&#39;listeners&#39; items must contain &#39;port&#39; value&#34;)
+
+        # When &#39;enable_smtps&#39; is set, ensure it is a bool
+        if not isinstance(listener.get(&#34;enable_smtps&#34;, enable_smtps_default), bool):
+            raise framework.Error(&#34;&#39;enable_smtps&#39; items must be type bool&#34;)
+
+        # Mark this as a TLS enabled listen if SMTPS is enabled
+        if listener.get(&#34;enable_smtps&#34;, enable_smtps_default):
+            tls_listener = True
+
+        # When &#39;enable_starttls&#39; is set, validate associated fields
+        if &#34;enable_starttls&#34; in listener.keys():
+            # Mark this as a TLS enabled listener
+            tls_listener = True
+
+            # Ensure &#39;enable_smtps&#39; was not also enabled
+            if listener.get(&#34;enable_smtps&#34;, enable_smtps_default):
+                raise framework.Error(
+                    &#34;&#39;listeners&#39; items &#39;enable_starttls&#39; and &#39;enable_smtps&#39; cannot be active on the same listener&#34;
+                )
+
+            # Ensure it is a bool
+            if not isinstance(listener.get(&#34;enable_starttls&#34;, enable_starttls_default), bool):
+                raise framework.Error(&#34;&#39;listeners&#39; item &#39;enable_starttls&#39; value must be type bool&#34;)
+
+            # Check for &#39;require_starttls&#39; option and ensure it is a bool
+            if not isinstance(listener.get(&#34;require_starttls&#34;, require_starttls_default), bool):
+                raise framework.Error(&#34;&#39;listeners&#39; item &#39;require_starttls&#39; value must be type bool&#34;)
+
+        # If this was marked as a TLS listener, validate TLS configuration
+        if tls_listener:
+            # Require the minimum_tls_protocol to be known
+            if listener.get(&#34;minimum_tls_protocol&#34;, tls_minimum_version_default) not in tls_minimum_version_options:
+                raise framework.Error(&#34;&#39;listeners&#39; item &#39;minimum_tls_protocol&#39; value is not known protocol&#34;)
+
+            # Require a TLS certificate and key
+            for field in [&#34;tls_cert&#34;, &#34;tls_key&#34;]:
+                if field not in listener.keys():
+                    raise framework.Error(f&#34;&#39;listeners&#39; item &#39;{field}&#39; is required to use stmps or starttls&#34;)
+
+                # Ensure field is string
+                if not isinstance(listener.get(field), str):
+                    raise framework.Error(f&#34;&#39;listeners&#39; item &#39;{field}&#39; value must be type str&#34;)
+
+                # Ensure field is an existing filepath
+                if not pathlib.Path(listener.get(field)).exists():
+                    raise framework.Error(f&#34;&#39;listeners&#39; item &#39;{field}&#39; is not existing file path&#34;)
+
+            # Create the SSLContext for this listener
+            context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+            context.load_cert_chain(listener.get(&#34;tls_cert&#34;), listener.get(&#34;tls_key&#34;))
+            context.set_ciphers(&#34;HIGH&#34;)
+            context.minimum_version = tls_protocols[listener.get(&#34;tls_minimum_version&#34;, tls_minimum_version_default)]
+
+        # Create an SMTPS listener if configured
+        if listener.get(&#34;enable_smtps&#34;, enable_smtps_default):
+            valid_listeners.append(
+                framework.Listener(
+                    mappings=mappings,
+                    address=listener.get(&#34;address&#34;),
+                    port=listener.get(&#34;port&#34;),
+                    tls_context=context,
+                    enable_starttls=False,
+                    require_starttls=False,
+                    log_level=log_level
+                )
+            )
+        # Create a STARTTLS listener if configured
+        elif listener.get(&#34;enable_starttls&#34;, enable_starttls_default):
+            valid_listeners.append(
+                framework.Listener(
+                    mappings=mappings,
+                    address=listener.get(&#34;address&#34;),
+                    port=listener.get(&#34;port&#34;),
+                    tls_context=context,
+                    enable_starttls=True,
+                    require_starttls=listener.get(&#34;require_starttls&#34;, require_starttls_default),
+                    log_level=log_level
+                )
+            )
+        # Create normal SMTP listener otherwise
+        else:
+            valid_listeners.append(
+                framework.Listener(
+                    mappings=mappings,
+                    address=listener.get(&#34;address&#34;),
+                    port=listener.get(&#34;port&#34;),
+                    log_level=log_level
+                )
+            )
+
+    # Return the validated listeners
+    return valid_listeners</code></pre>
+</details>
+</dd>
+<dt id="mail2beyond.tools.get_mappings_from_dict"><code class="name flex">
+<span>def <span class="ident">get_mappings_from_dict</span></span>(<span>config: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Converts a dictionary representations of mappings to Mapping objects. Since Mapping objects are dependent on
+a Connector object, the dictionary must also include representations of Connector objects to use.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>config</code></strong> :&ensp;<code>dict</code></dt>
+<dd>A dictionary representation of different mappings to create.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="mail2beyond.framework.Error" href="framework.html#mail2beyond.framework.Error">Error</a></code></dt>
+<dd>When a validation error occurs.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list</code></dt>
+<dd>A list of Mapping objects that can be used.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_mappings_from_dict(config: dict):
+    &#34;&#34;&#34;
+    Converts a dictionary representations of mappings to Mapping objects. Since Mapping objects are dependent on
+    a Connector object, the dictionary must also include representations of Connector objects to use.
+
+    Args:
+        config (dict): A dictionary representation of different mappings to create.
+
+    Raises:
+        mail2beyond.framework.Error: When a validation error occurs.
+
+    Returns:
+        list: A list of Mapping objects that can be used.
+    &#34;&#34;&#34;
+    # Variables
+    config_connectors = get_connectors_from_dict(config)
+    available_parsers = dict(inspect.getmembers(parsers, inspect.ismodule))
+    valid_mappings = []
+
+    # Require mappings config to be defined
+    if &#34;mappings&#34; not in config.keys():
+        raise framework.Error(&#34;&#39;mappings&#39; value is required&#34;)
+
+    # Require mappings config to be a list
+    if not isinstance(config.get(&#34;mappings&#34;), list):
+        raise framework.Error(&#34;&#39;mappings&#39; value must be type list&#34;)
+
+    # Require at least one mapping
+    if len(config.get(&#34;mappings&#34;)) == 0:
+        raise framework.Error(&#34;at least one &#39;mappings&#39; item is required&#34;)
+
+    # Loop through each mapping in the configuration
+    for mapping in config.get(&#34;mappings&#34;):
+        # Require mapping definition to be a dict
+        if not isinstance(mapping, dict):
+            raise framework.Error(&#34;&#39;mappings&#39; items must be type dict&#34;)
+
+        # Require mapping connector to be defined
+        if &#34;connector&#34; not in mapping.keys():
+            raise framework.Error(&#34;&#39;mappings&#39; items must contain &#39;connector&#39; value&#34;)
+
+        # Get this mapping&#39;s connector
+        connector = get_connector_by_name(mapping.get(&#34;connector&#34;), config_connectors)
+
+        # Require this mapping&#39;s connector to exist
+        if not connector:
+            raise framework.Error(f&#34;&#39;mappings&#39; item references undefined connector &#39;{mapping[&#39;connector&#39;]}&#39;&#34;)
+
+        # Replace the mapping&#39;s connector item with the actual object so it can be passed in with kwargs below
+        mapping[&#34;connector&#34;] = connector
+
+        # Ensure parser is a known
+        parser = mapping.get(&#34;parser&#34;, &#34;auto&#34;)
+        if parser not in available_parsers:
+            raise framework.Error(f&#34;&#39;mappings&#39; item references undefined parser module &#39;{parser}&#39;&#34;)
+
+        # Replace the mapping&#39;s parser item with the actual Parser class so it can be passed into with kwargs below
+        mapping[&#34;parser&#34;] = available_parsers.get(parser).Parser
+
+        # Add this mapping, it is valid
+        mapping_obj = framework.Mapping(**mapping)
+        valid_mappings.append(mapping_obj)
+
+    # Return our connector objects
+    return valid_mappings</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="mail2beyond" href="index.html">mail2beyond</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="mail2beyond.tools.generate_tls_certificate" href="#mail2beyond.tools.generate_tls_certificate">generate_tls_certificate</a></code></li>
+<li><code><a title="mail2beyond.tools.get_connector_by_name" href="#mail2beyond.tools.get_connector_by_name">get_connector_by_name</a></code></li>
+<li><code><a title="mail2beyond.tools.get_connectors_from_dict" href="#mail2beyond.tools.get_connectors_from_dict">get_connectors_from_dict</a></code></li>
+<li><code><a title="mail2beyond.tools.get_listeners_from_dict" href="#mail2beyond.tools.get_listeners_from_dict">get_listeners_from_dict</a></code></li>
+<li><code><a title="mail2beyond.tools.get_mappings_from_dict" href="#mail2beyond.tools.get_mappings_from_dict">get_mappings_from_dict</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

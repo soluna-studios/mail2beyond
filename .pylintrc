@@ -2,6 +2,7 @@
 # Allow logging to be fstring for consistency
 # No useless super delegation since child class should always use the parent class's init for proper inheritance.
 disable=logging-fstring-interpolation,useless-super-delegation
+ignore-paths=examples/
 
 [BASIC]
 # aiosmtpd expects class method handle_DATA

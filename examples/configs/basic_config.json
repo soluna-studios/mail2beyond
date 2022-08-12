@@ -1,0 +1,44 @@
+{
+  "listeners": [
+    {
+      "address": "localhost",
+      "port": 25
+    }
+  ],
+  "connectors": [
+    {
+      "name": "my_google_chat_space",
+      "module": "google_chat",
+      "config": {
+        "webhook_url": "<YOUR GOOGLE CHAT WEBHOOK URL>"
+      }
+    },
+    {
+      "name": "my_slack_channel",
+      "module": "slack",
+      "config": {
+        "webhook_url": "<YOUR SLACK WEBHOOK URL>"
+      }
+    },
+    {
+      "name": "my_trash_bin",
+      "module": "void"
+    }
+  ],
+  "mappings": [
+    {
+      "pattern": "^google_chat@example.com$",
+      "field": "to",
+      "connector": "my_google_chat_space"
+    },
+    {
+      "pattern": "^slack@example.com$",
+      "field": "from",
+      "connector": "my_slack_channel"
+    },
+    {
+      "pattern": "default",
+      "connector": "my_trash_bin"
+    }
+  ]
+}

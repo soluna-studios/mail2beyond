@@ -1,0 +1,37 @@
+---
+listeners:
+  # Listen for SMTP messages on localhost port 25
+  - address: localhost
+    port: 25
+
+connectors:
+  # Create a connector for a Google Chat space
+  - name: my_google_chat_space
+    module: google_chat
+    config:
+      webhook_url:  <YOUR GOOGLE CHAT WEBHOOK URL>
+
+  # Create a connector for a Slack channel
+  - name: my_slack_channel
+    module: slack
+    config:
+      webhook_url: <YOUR SLACK WEBHOOK URL>
+
+  # Create connector that discards messages
+  - name: my_trash_bin
+    module: void
+
+mappings:
+  # Redirect SMTP messages with recipient 'google_chat@example.com' to Google Chat
+  - pattern: "^google_chat@example.com$"
+    field: to
+    connector: my_google_chat_space
+
+  # Redirect SMTP messages with sender 'slack@example.com' to Slack
+  - pattern: "^slack@example.com$"
+    field: from
+    connector: my_slack_channel
+
+  # Discard anything that doesn't match any other mappings
+  - pattern: default
+    connector: my_trash_bin
