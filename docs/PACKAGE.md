@@ -3,7 +3,7 @@ Mail2Beyond Python Package Documentation
 Mail2Beyond is built upon a simple framework that allows developers to integrate Mail2Beyond into their own applications, 
 or extend the existing functionality by writing custom connector and parser modules. If you are just getting started, it
 is recommended to first familiarize yourself with the 
-[Mail2Beyond CLI](https://github.com/jaredhendrickson13/mail2beyond/blob/documentation/docs/CLI.md) as it is a great way to
+[Mail2Beyond CLI](https://github.com/soluna-studios/mail2beyond/blob/master/docs/CLI.md) as it is a great way to
 learn how the components work.
 
 ## Getting started
@@ -11,8 +11,8 @@ If you've used the Mail2Beyond CLI, you are likely already familiar with the con
 listeners. These components also apply to the Mail2Beyond Python package but are handled slightly differently than the
 CLI.
 
-You may also want to refer to the 
-[API Documentation](https://github.com/jaredhendrickson13/mail2beyond/blob/documentation/docs/html/)
+You may refer to the 
+[API Documentation](https://soluna-studios.github.io/mail2beyond/)
 
 ### Defining Connector Objects
 Connectors are the component that redirects SMTP messages to a specific API or service. There are a handful of built-in

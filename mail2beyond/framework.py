@@ -442,8 +442,8 @@ class Mapping:
                 the content body based on the email's content-type header or pass in your own custom parser class.
 
         See Also:
-            https://github.com/jaredhendrickson13/mail2beyond/blob/master/docs/PACKAGE.md#writing-custom-connectors
-            https://github.com/jaredhendrickson13/mail2beyond/blob/master/docs/PACKAGE.md#writing-custom-parsers
+            https://github.com/soluna-studios/mail2beyond/blob/master/docs/PACKAGE.md#writing-custom-connectors
+            https://github.com/soluna-studios/mail2beyond/blob/master/docs/PACKAGE.md#writing-custom-parsers
         """
         # Assign required attributes
         self.pattern = pattern

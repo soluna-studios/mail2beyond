@@ -14,7 +14,7 @@ tool. The CLI allows you define listeners, connectors and mappings using a JSON 
 
 ## Configuration
 A configuration file must be written before `mail2beyond` is started. It may also be helpful to check out the 
-[examples on GitHub](https://github.com/jaredhendrickson13/mail2beyond/tree/master/examples/configs). Configuration 
+[examples on GitHub](https://github.com/soluna-studios/mail2beyond/tree/master/examples/configs). Configuration 
 requirements and options are:
 
 -----------------------------------------------------------------------------------------------------------------------
