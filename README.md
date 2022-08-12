@@ -1,8 +1,8 @@
 Mail2Beyond
 =========
 
-[![PyLint](https://github.com/jaredhendrickson13/mail2beyond/actions/workflows/pylint.yml/badge.svg)](https://github.com/jaredhendrickson13/mail2beyond/actions/workflows/pylint.yml)
-[![Unit Tests](https://github.com/jaredhendrickson13/mail2beyond/actions/workflows/unittest.yml/badge.svg)](https://github.com/jaredhendrickson13/mail2beyond/actions/workflows/unittest.yml/badge.svg)
+[![PyLint](https://github.com/soluna-studios/mail2beyond/actions/workflows/pylint.yml/badge.svg)](https://github.com/soluna-studios/mail2beyond/actions/workflows/pylint.yml)
+[![Unit Tests](https://github.com/soluna-studios/mail2beyond/actions/workflows/unittest.yml/badge.svg)](https://github.com/soluna-studios/mail2beyond/actions/workflows/unittest.yml/badge.svg)
 
 Mail2Beyond is a Python-based SMTP server designed to redirect incoming SMTP messages to upstream APIs such as
 Google Chat, Slack, or even your own API! This includes a command line interface (CLI) that can be used to run
@@ -46,5 +46,5 @@ Mappings define which SMTP messages use which connector. This checks if a specif
 regular expression. If a match is found, the message is sent using the connector specified in the mapping.
 
 ## Developer Documentation
-- [CLI Documentation](https://github.com/jaredhendrickson13/mail2beyond/blob/documentation/docs/CLI.md)
-- [Python Package Documentation](https://github.com/jaredhendrickson13/mail2beyond/blob/documentation/docs/PACKAGE.md)
+- [CLI Documentation](https://github.com/soluna-studios/mail2beyond/blob/master/docs/CLI.md)
+- [Python Package Documentation](https://github.com/soluna-studios/mail2beyond/blob/master/docs/PACKAGE.md)
