@@ -40,7 +40,7 @@ setup(
     name='mail2beyond',
     author='Jared Hendrickson',
     author_email='jaredhendrickson13@gmail.com',
-    url="https://github.com/jaredhendrickson13/mail2beyond",
+    url="https://github.com/soluna-studios/mail2beyond",
     license="Apache-2.0",
     description="A Python based SMTP server package and CLI that redirects incoming SMTP messages to upstream APIs like"
                 " Google Chat, Slack and more!.",
@@ -55,5 +55,5 @@ setup(
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.6'
+    python_requires='>=3.8'
 )
