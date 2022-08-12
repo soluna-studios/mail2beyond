@@ -6,7 +6,6 @@ import pathlib
 import json
 import yaml
 import sys
-import signal
 
 
 class Mail2BeyondCLI:
@@ -23,7 +22,7 @@ class Mail2BeyondCLI:
             listener.start()
 
         # Wait for incoming connections
-        signal.pause()
+        mail2beyond.framework.Listener.wait()
 
     @staticmethod
     def parse_args():

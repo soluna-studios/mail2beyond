@@ -95,7 +95,7 @@ following options available:
 A list of mapping rules to apply. Mappings allow you to apply logic to which connectors are used based on the SMTP 
 headers of incoming SMTP messages. A specified header is checked for a specific pattern using regular expressions. If a
 match is found, the connector specified in the mapping will be used to redirect the message. Mappings are checked in 
-descending order and are used on a first-match basis. At least one mapping must be defined, and at least one mapping
+descending order and are used on a first-match basis. At least one mapping must be defined, and one mapping
 must use the pattern `default` to assume a default if no other mappings were matched. Each mapping has the following 
 options available:
 

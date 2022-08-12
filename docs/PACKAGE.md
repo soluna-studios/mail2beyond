@@ -1,7 +1,7 @@
 Mail2Beyond Python Package Documentation
 ======================================
 Mail2Beyond is built upon a simple framework that allows developers to integrate Mail2Beyond into their own applications, 
-extend the existing functionality by writing custom connector and parser modules. If you are just getting started, it
+or extend the existing functionality by writing custom connector and parser modules. If you are just getting started, it
 is recommended to first familiarize yourself with the 
 [Mail2Beyond CLI](https://github.com/jaredhendrickson13/mail2beyond/blob/documentation/docs/CLI.md) as it is a great way to
 learn how the components work.
@@ -62,7 +62,7 @@ plain_parser = mail2beyond.parsers.plain.Parser
 - Some connector modules will not respect the parser (e.g. `void`, `smtp`).
 - Even when a parser converts the content to a markdown format (e.g. `html`), it does not guarentee the markdown can be
 rendered by the service the connector interacts with
-- .
+
 ### Defining Mapping Objects
 Mappings allow you to apply logic to which connectors are used based on the SMTP headers of incoming SMTP messages. A 
 specified header is checked for a specific pattern using regular expressions. If a match is found, the connector 
@@ -125,7 +125,6 @@ an example of defining various listeners:
 ```python
 import mail2beyond
 import ssl
-import signal
 import logging
 
 ### DEFINE CONNECTORS
@@ -196,7 +195,7 @@ smtps_listener = mail2beyond.framework.Listener(
 # Start each listener and pause this script while we await incoming SMTP messages
 smtp_listener.start()
 smtps_listener.start()
-signal.pause()
+mail2beyond.framework.Listener.wait()
 
 ```
 
@@ -303,7 +302,7 @@ it in your mappings like any other connector!
 import mail2beyond
 import requests
 import logging
-import signal
+
 
 class Connector(mail2beyond.framework.BaseConnector):
     name = "my_custom_connnector"
@@ -358,8 +357,7 @@ smtp_listener = mail2beyond.framework.Listener(
 
 # Start the listener
 smtp_listener.start()
-signal.pause()
-
+mail2beyond.framework.Listener.wait()
 ```
 
 Now you have a listener that will redirect SMTP messages to your API using a custom connector!
@@ -415,7 +413,6 @@ like any other parser class!
 ```python
 import mail2beyond
 import logging
-import signal
 
 class Parser(mail2beyond.framework.BaseParser):
     name = "my_custom_parser"
@@ -449,8 +446,7 @@ smtp_listener = mail2beyond.framework.Listener(
 
 # Start the listener
 smtp_listener.start()
-signal.pause()
-
+mail2beyond.framework.Listener.wait()
 ```
 
 Now you have a listener that will parse the mail content using your custom parser before calling a connector!

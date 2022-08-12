@@ -5,6 +5,7 @@ import inspect
 import ipaddress
 import re
 import logging
+import signal
 import ssl
 
 from aiosmtpd.controller import Controller
@@ -57,6 +58,11 @@ class Listener:
         """Start the listener."""
         self.controller.start()
         self.log.info(f"mail2beyond started listening on {self.address}:{self.port}")
+
+    @staticmethod
+    def wait():
+        """Allows the listener to wait indefinitely so it can accept incoming SMTP messages."""
+        signal.pause()
 
     def setup_controller(self):
         """Sets up the controller object with the current address, port and options."""
