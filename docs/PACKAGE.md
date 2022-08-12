@@ -11,8 +11,8 @@ If you've used the Mail2Beyond CLI, you are likely already familiar with the con
 listeners. These components also apply to the Mail2Beyond Python package but are handled slightly differently than the
 CLI.
 
-You may also want to refer to the 
-[API Documentation](https://github.com/soluna-studios/mail2beyond/blob/master/docs/html/)
+You may refer to the 
+[API Documentation](https://soluna-studios.github.io/mail2beyond/)
 
 ### Defining Connector Objects
 Connectors are the component that redirects SMTP messages to a specific API or service. There are a handful of built-in
