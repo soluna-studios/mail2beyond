@@ -6,10 +6,13 @@ is recommended to first familiarize yourself with the
 [Mail2Beyond CLI](https://github.com/jaredhendrickson13/mail2beyond/blob/documentation/docs/CLI.md) as it is a great way to
 learn how the components work.
 
-## Running the Server
+## Getting started
 If you've used the Mail2Beyond CLI, you are likely already familiar with the concept of connectors, mappings, parsers and 
 listeners. These components also apply to the Mail2Beyond Python package but are handled slightly differently than the
 CLI.
+
+You may also want to refer to the 
+[API Documentation](https://github.com/jaredhendrickson13/mail2beyond/blob/documentation/docs/html/)
 
 ### Defining Connector Objects
 Connectors are the component that redirects SMTP messages to a specific API or service. There are a handful of built-in

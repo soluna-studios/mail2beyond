@@ -1,5 +1,5 @@
 """
-Module that contains parsers that parse an email's content body as HTML and converts it to a markdown format.
+Module that contains a parser that parses an email's content body as HTML and converts it to a markdown format.
 """
 
 import html2text

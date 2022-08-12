@@ -22,7 +22,9 @@ class Parser(framework.BaseParser):
         """
         Uses the mail's 'content-type' header to determine which parser to use. In the case there is no match, the
         default 'plain' parser will be used.
-        @return: (Parser) the Parser object to be used.
+
+        Returns:
+            mail2beyond.framework.BaseParser: The Parser object determined to be the best match for the content-type.
         """
         # Fetch our content type
         content_type = self.mail.headers.get_content_type()

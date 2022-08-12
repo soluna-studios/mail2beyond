@@ -1,4 +1,6 @@
-"""Holds tool functions that assist the CLI controller and unit tests."""
+"""
+Module that includes tool functions that primarily assist the CLI and unit tests, but may be useful to others.
+"""
 
 import inspect
 import logging
@@ -14,9 +16,15 @@ from . import framework
 
 def get_connectors_from_dict(config: dict):
     """
-    Converts dictionary representations of connectors to connector objects.
-    @param config: (dict) a dictionary representation of different connectors to create.
-    @return: (list) a list of Connector objects that can be used.
+    Converts a dictionary representations of connectors to connector objects.
+    Args:
+        config (dict): A dictionary representation of different connectors to create.
+
+    Raises:
+        mail2beyond.framework.Error: When a validation error occurs.
+
+    Returns:
+        list: A list of Connector objects that can be used.
     """
     # Create a list to store the created connector objects
     valid_connectors = []
@@ -73,10 +81,15 @@ def get_connectors_from_dict(config: dict):
 
 def get_connector_by_name(name, connector_objs):
     """
-    Finds the connector with a specific name from a list of connector objects.
-    @param name: (str) the name of the connector to fetch.
-    @param connector_objs: (list) a list of connector objects to query.
-    @return: (Connector) the connector object with the specified name. or None if there was no match.
+    Gets the connector with a specific name from a list of Connector objects.
+
+    Args:
+        name (str): The name of the connector to find.
+        connector_objs (list): A list of Connector objects to search.
+
+    Returns:
+        mail2beyond.framework.BaseConnector: The Connector object with the specified name if one was found.
+        None: When no Connector object was found with the specified name.
     """
     # Loop through each connector and return the connector with the specified name
     for connector in connector_objs:
@@ -88,9 +101,17 @@ def get_connector_by_name(name, connector_objs):
 
 def get_mappings_from_dict(config: dict):
     """
-    Converts dictionary representations of mappings to Mapping objects.
-    @param config: (dict) a dictionary representation of different connectors to create.
-    @return: (list) a list of Connector objects that can be used.
+    Converts a dictionary representations of mappings to Mapping objects. Since Mapping objects are dependent on
+    a Connector object, the dictionary must also include representations of Connector objects to use.
+
+    Args:
+        config (dict): A dictionary representation of different mappings to create.
+
+    Raises:
+        mail2beyond.framework.Error: When a validation error occurs.
+
+    Returns:
+        list: A list of Mapping objects that can be used.
     """
     # Variables
     config_connectors = get_connectors_from_dict(config)
@@ -146,10 +167,21 @@ def get_mappings_from_dict(config: dict):
 
 
 def get_listeners_from_dict(config: dict, log_level: int = logging.NOTSET):
-    """Converts dictionary representations of mappings to Mapping objects.
-    @param config: (dict) a dictionary representation of different listeners to create.
-    @param log_level: (int) the logging level to configure listeners to use.
-    @return: (list) a list of valid Listener objects that can be used.
+    """
+    Converts a dictionary representations of listeners to Listener objects. Since Listener objects are dependent on
+    a Mapping objects, and Mapping objects are dependent on Connector objects, the dictionary must also include
+    representations of both Mapping and Connector objects to use.
+
+    Args:
+        config (dict): A dictionary representation of different mappings to create.
+        log_level (int): Sets the logging level the Listeners' Logger will start logging at. See
+            https://docs.python.org/3/library/logging.html#logging-levels
+
+    Raises:
+        mail2beyond.framework.Error: When a validation error occurs.
+
+    Returns:
+        list: A list of Listener objects that can be used.
     """
     # Validating listeners from configuration requires many conditions because there are many options.
     # In the future, consider grouping config validation into it's own class with getters and setters.
@@ -295,12 +327,15 @@ def get_listeners_from_dict(config: dict, log_level: int = logging.NOTSET):
     return valid_listeners
 
 
-def generate_tls_certificate(cert_path, key_path):
+def generate_tls_certificate(cert_path: str, key_path: str):
     """
-    Generates a self-signed certificate. This is primarily used for unit tests, but could be useful elsewhere.
-    @param cert_path: (str) the file path to store the generated certificate file.
-    @param key_path: (str) the file path to store the generated key file.
+    Generates a self-signed certificate and private key at a specified file path. This is primarily used for unit tests,
+    but could be useful elsewhere too.
+    Args:
+        cert_path (str): The file path to write the generated certificate file to.
+        key_path (str): The file path to write the generated key file to.
     """
+
     # Generate private key
     key = crypto.PKey()
     key.generate_key(crypto.TYPE_RSA, 2048)
