@@ -487,7 +487,7 @@ class BaseParser:
     def __init__(self, mail, **kwargs):
         """
         Initialize the Parser object with required attributes.
-        @param mail: (mail2beyond.framework.Email) the email object created by mail2beyond.framework.Listener.handle_DATA
+        @param mail: (mail2beyond.framework.Email) email object created by mail2beyond.framework.Listener.handle_DATA
         """
         self.mail = mail
         self.config = kwargs
