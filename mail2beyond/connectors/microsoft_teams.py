@@ -18,7 +18,7 @@ class Connector(framework.BaseConnector):
         try:
             resp = requests.post(
                 url=self.config["webhook_url"],
-                headers={'Content-Type': 'application/json; charset=UTF-8'},
+                headers={'Content-Type': 'application/json; charset=utf-8'},
                 json={"text": f"*{parser.subject}*\n\n{parser.content}"}
             )
             self.log.debug(f"connector '{self}' responded with {resp.status_code} status {resp.text}")
