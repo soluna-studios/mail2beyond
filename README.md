@@ -12,6 +12,7 @@ Mail2Beyond as a standalone server, as well as a Python package that you can use
 applications. 
 
 ## Installation
+To install Mail2Beyond, simply run the following command:
 ```
 pip install mail2beyond
 ```
