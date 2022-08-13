@@ -714,17 +714,18 @@ content-type, but is equipped to handle other content-types as well. You are als
 are the built-in parsers that are available out of the box:
 
 ## auto
-The `mail2beyond.parsers.auto.Parser` will automatically select the best parser to use based on the content-type of a 
-received SMTP message. In most cases, this will be the preferred parser to use. For example, if Mail2Beyond received an 
-SMTP message with a `text/html` content-type the `auto` parser will choose to parse the email with the `html` parser. 
+The `auto` parser module's `mail2beyond.parsers.auto.Parser` will automatically select the best parser to use based on 
+the content-type of a received SMTP message. In most cases, this will be the preferred parser to use. For example, if 
+Mail2Beyond received an SMTP message with a `text/html` content-type the `auto` parser will choose to parse the email 
+with the `html` parser. 
 
 ## html
-The `mail2beyond.parsers.html.Parser` parser will parse the received SMTP message's content body from HTML to a 
-human-readable markdown format. This works well for basic HTML formatted emails, but may not represent more complex 
-HTML as well. If the `html` parser is not sufficient for your needs, 
+The `html` parser module's `mail2beyond.parsers.html.Parser` parser will parse the received SMTP message's content body
+from HTML to a human-readable markdown format. This works well for basic HTML formatted emails, but may not represent 
+more complex HTML as well. If the `html` parser is not sufficient for your needs, 
 [writing your own parser module](#writing-custom-parsers) may be the best solution.
 
 ## plain
-The `mail2beyond.parsers.plain.Parser` will simply represent the SMTP message's content body as plaintext and will not
-apply any additional formatting to the message. This is the default fallback parser for the 
+The `plain` parser module's `mail2beyond.parsers.plain.Parser` will simply represent the SMTP message's content body as 
+plaintext and will not apply any additional formatting to the message. This is the default fallback parser for the 
 `mail2beyond.parsers.auto.Parser` in the event that the content-type is unknown.
