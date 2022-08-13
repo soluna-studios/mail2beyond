@@ -1,4 +1,6 @@
-"""Module that groups all required sub-packages and sub-modules for the mail2beyond package."""
+"""
+.. include:: ./docs/documentation.md
+"""
 from . import framework
 from . import connectors
 from . import parsers

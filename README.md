@@ -1,13 +1,30 @@
 Mail2Beyond
 =========
 
+[![Documentation Build](https://github.com/soluna-studios/mail2beyond/actions/workflows/pages.yml/badge.svg)](https://github.com/soluna-studios/mail2beyond/actions/workflows/pages.yml)
 [![PyLint](https://github.com/soluna-studios/mail2beyond/actions/workflows/pylint.yml/badge.svg)](https://github.com/soluna-studios/mail2beyond/actions/workflows/pylint.yml)
-[![Unit Tests](https://github.com/soluna-studios/mail2beyond/actions/workflows/unittest.yml/badge.svg)](https://github.com/soluna-studios/mail2beyond/actions/workflows/unittest.yml/badge.svg)
+[![Unit Tests](https://github.com/soluna-studios/mail2beyond/actions/workflows/unittest.yml/badge.svg)](https://github.com/soluna-studios/mail2beyond/actions/workflows/unittest.yml)
 
 Mail2Beyond is a Python-based SMTP server designed to redirect incoming SMTP messages to upstream APIs such as
 Google Chat, Slack, or even your own API! This includes a command line interface (CLI) that can be used to run
 Mail2Beyond as a standalone server, as well as a Python package that you can use to extend or integrate into your own
 applications. 
+
+## Installation
+```
+pip install mail2beyond
+```
+
+## Usage
+Before starting the Mail2Beyond server, you must 
+[create your configuration file](https://soluna-studios.github.io/mail2beyond/index.html#configuration). Once you have
+your configuration file ready, you can start the server by running:
+```
+mail2beyond --config /path/to/your/config.yml
+```
+
+## Developer Documentation
+- [API Reference](https://soluna-studios.github.io/mail2beyond/)
 
 ## How is This Useful? 
 Emails are often ignored due to the amount of spam we receive on a daily basis. Many systems and applications use SMTP
@@ -24,27 +41,3 @@ Mail2Beyond continually listens for incoming SMTP messages. When a message is re
 against a set of admin configured mappings that dictate which API connector is to be used. Mappings define which SMTP 
 headers should be checked for a specific regular expression match. When a match is found, the email contents are parsed
 and sent to the upstream API using the connector specified in the mapping.
-
-## Getting Started
-There are a few terms you should be familiar with:
-
-### Listeners
-Listeners are individual instances of the Mail2Beyond SMTP server. Listeners define what address, port and protocol the 
-server will listen on. Commonly, users will configure a listener for SMTP and another for SMTPS. Additionally, 
-listeners can be configured to advertise or require the STARTTLS option to upgrade unencrypted connections to encrypted
-connections.
-
-### Connectors
-Connectors are simply the API connectors Mail2Beyond can interact with. Built-in connectors include:
-- `google_chat` : Sends the incoming SMTP message to Google Chat.
-- `slack`       : Sends the incoming SMTP message to Slack
-- `smtp`        : Forwards the incoming SMTP message to an upstream SMTP server.
-- `void`        : Discards the incoming SMTP message.
-
-### Mappings
-Mappings define which SMTP messages use which connector. This checks if a specific SMTP header matches a particular
-regular expression. If a match is found, the message is sent using the connector specified in the mapping.
-
-## Developer Documentation
-- [CLI Documentation](https://github.com/soluna-studios/mail2beyond/blob/master/docs/CLI.md)
-- [Python Package Documentation](https://github.com/soluna-studios/mail2beyond/blob/master/docs/PACKAGE.md)
