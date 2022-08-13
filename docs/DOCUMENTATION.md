@@ -571,13 +571,13 @@ configuration. This name will be used to assign this connector to mappings in yo
 **module**
 
 - _Required_: Yes
-- _Options_: [`void`, `smtp`, `google_chat`, `slack`]
+- _Options_: [`void`, `smtp`, `slack`, `google_chat`, `microsoft_teams`]
 - _Description_: The module this connector will use. Multiple connectors can use the same underlying module.
 
 **config**
 
 - _Required_: Dependent on `module` selected.
-- _Description_: Additional module specific configurations. Refer to the 
+- _Description_: Additional connector module specific configurations. Refer to the 
 [built-in connectors section](#built-in-connectors) for requirements and options for the specified module this 
 connector is assigned.
 
@@ -684,7 +684,7 @@ created for your channel beforehand. Available options for this module are:
 **webhook_url**
 
 - _Required_: Yes
-- _Description_: The full Slack webhook URL. For help creating a webhook, refer to 
+- _Description_: The full Slack webhook URL. For help with creating a webhook, refer to 
 https://api.slack.com/messaging/webhooks
 
 ## ```google_chat```
@@ -694,8 +694,18 @@ must be created for your space beforehand. Available options for this module are
 **webhook_url**
 
 - _Required_: Yes
-- _Description_: The full Google Chat webhook URL. For help creating a webhook, refer to 
+- _Description_: The full Google Chat webhook URL. For help with creating a webhook, refer to 
 https://developers.google.com/chat/how-tos/webhooks
+
+## ```microsoft_teams```
+The `microsoft_teams` module allows SMTP messages to be redirected to a Microsoft Teams channel using an app webhook. 
+A webhook must be created for your channel beforehand. Available options for this module are:
+
+**webhook_url**
+
+- _Required_: Yes
+- _Description_: The full Microsoft Teams webhook URL. For help with creating a webhook, refer to 
+https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook
 
 # Built-in Parsers
 SMTP messages may contain content of varying types. Mail2Beyond works best with SMTP messages with a `text/plain` 
@@ -704,17 +714,18 @@ content-type, but is equipped to handle other content-types as well. You are als
 are the built-in parsers that are available out of the box:
 
 ## auto
-The `mail2beyond.parsers.auto.Parser` will automatically select the best parser to use based on the content-type of a 
-received SMTP message. In most cases, this will be the preferred parser to use. For example, if Mail2Beyond received an 
-SMTP message with a `text/html` content-type the `auto` parser will choose to parse the email with the `html` parser. 
+The `auto` parser module's `mail2beyond.parsers.auto.Parser` will automatically select the best parser to use based on 
+the content-type of a received SMTP message. In most cases, this will be the preferred parser to use. For example, if 
+Mail2Beyond received an SMTP message with a `text/html` content-type the `auto` parser will choose to parse the email 
+with the `html` parser. 
 
 ## html
-The `mail2beyond.parsers.html.Parser` parser will parse the received SMTP message's content body from HTML to a 
-human-readable markdown format. This works well for basic HTML formatted emails, but may not represent more complex 
-HTML as well. If the `html` parser is not sufficient for your needs, 
+The `html` parser module's `mail2beyond.parsers.html.Parser` parser will parse the received SMTP message's content body
+from HTML to a human-readable markdown format. This works well for basic HTML formatted emails, but may not represent 
+more complex HTML as well. If the `html` parser is not sufficient for your needs, 
 [writing your own parser module](#writing-custom-parsers) may be the best solution.
 
 ## plain
-The `mail2beyond.parsers.plain.Parser` will simply represent the SMTP message's content body as plaintext and will not
-apply any additional formatting to the message. This is the default fallback parser for the 
+The `plain` parser module's `mail2beyond.parsers.plain.Parser` will simply represent the SMTP message's content body as 
+plaintext and will not apply any additional formatting to the message. This is the default fallback parser for the 
 `mail2beyond.parsers.auto.Parser` in the event that the content-type is unknown.

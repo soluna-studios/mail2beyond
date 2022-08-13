@@ -2,8 +2,9 @@ Mail2Beyond
 =========
 
 [![Documentation Build](https://github.com/soluna-studios/mail2beyond/actions/workflows/pages.yml/badge.svg)](https://github.com/soluna-studios/mail2beyond/actions/workflows/pages.yml)
-[![PyLint](https://github.com/soluna-studios/mail2beyond/actions/workflows/pylint.yml/badge.svg)](https://github.com/soluna-studios/mail2beyond/actions/workflows/pylint.yml)
 [![Unit Tests](https://github.com/soluna-studios/mail2beyond/actions/workflows/unittest.yml/badge.svg)](https://github.com/soluna-studios/mail2beyond/actions/workflows/unittest.yml)
+[![PyLint](https://github.com/soluna-studios/mail2beyond/actions/workflows/pylint.yml/badge.svg)](https://github.com/soluna-studios/mail2beyond/actions/workflows/pylint.yml)
+[![CodeQL](https://github.com/soluna-studios/mail2beyond/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/soluna-studios/mail2beyond/actions/workflows/codeql-analysis.yml)
 
 Mail2Beyond is a Python-based SMTP server designed to redirect incoming SMTP messages to upstream APIs such as
 Google Chat, Slack, or even your own API! This includes a command line interface (CLI) that can be used to run
@@ -11,6 +12,7 @@ Mail2Beyond as a standalone server, as well as a Python package that you can use
 applications. 
 
 ## Installation
+To install Mail2Beyond, simply run the following command:
 ```
 pip install mail2beyond
 ```
