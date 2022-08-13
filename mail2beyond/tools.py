@@ -6,12 +6,66 @@ import inspect
 import logging
 import pathlib
 import ssl
+import sys
 
 from OpenSSL import crypto
 
 from . import connectors
 from . import parsers
 from . import framework
+
+
+def get_connector_modules(path: (str, None) = None):
+    """
+    Gathers all available connector modules. This allows a 'path' to be specified to optionally pass in plugin connector
+    modules. Built-in connectors are always included.
+
+    Args:
+        path (str, None): A path to a directory that contains plugin connector modules. Only .py files within this
+            directory will be included. Each .py file must include a class named `Connector` that extends the
+            `mail2beyond.framework.BaseConnector class. If `None` is specified, only the built-in connector modules
+            will be available.
+
+    Raises:
+        mail2beyond.framework.Error: When plugin connector modules could not be loaded.
+
+    Returns:
+        dict: A dictionary of available connector modules. The dictionary keys will be the module names and the values
+            will be the module itself.
+    """
+    # Start by gathering the built-in connectors from the mail2beyond.connectors sub-package.
+    available_connectors = dict(inspect.getmembers(connectors, inspect.ismodule))
+
+    # Create a Path object
+
+    # If a plugin path was passed in, include modules within that directory as well.
+    if path:
+        # Convert 'path' into an object
+        path_obj = pathlib.Path(path)
+
+        # Require path to be an existing directory
+        if not path_obj.exists() or not path_obj.is_dir():
+            raise framework.Error(f"failed to load connector modules '{path}' is not an existing directory")
+
+        # Add this directory to our Python path
+        sys.path.append(str(path_obj.absolute()))
+
+        # Loop through each .py file in the directory and ensure it is valid
+        for module_path in path_obj.glob("*.py"):
+            # Verify this module could be imported, contains the Connector class and is added to available connectors.
+            try:
+                module = __import__(module_path.stem)
+                getattr(module, "Connector")
+                available_connectors[module_path.stem] = module
+            except ModuleNotFoundError as exc:
+                mod_not_found_err_msg = f"failed to import connector module '{module_path.stem}' from '{path}'"
+                raise framework.Error(mod_not_found_err_msg) from exc
+            except AttributeError as exc:
+                attr_err_msg = f"connector module '{module_path.stem}' from '{path}' has no class named 'Connector'"
+                raise framework.Error(attr_err_msg) from exc
+
+    # Return the gathered connector modules
+    return available_connectors
 
 
 def get_connectors_from_dict(config: dict):
