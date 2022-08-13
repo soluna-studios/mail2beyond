@@ -1,5 +1,5 @@
 """
-.. include:: ./docs/DOCUMENTATION.md
+.. include:: ../docs/DOCUMENTATION.md
 """
 from . import framework
 from . import connectors
