@@ -571,7 +571,7 @@ configuration. This name will be used to assign this connector to mappings in yo
 **module**
 
 - _Required_: Yes
-- _Options_: [`void`, `smtp`, `slack`, `google_chat`, `microsoft_teams`]
+- _Options_: [`void`, `smtp`, `slack`, `discord`, `google_chat`, `microsoft_teams`]
 - _Description_: The module this connector will use. Multiple connectors can use the same underlying module.
 
 **config**
@@ -686,6 +686,17 @@ created for your channel beforehand. Available options for this module are:
 - _Required_: Yes
 - _Description_: The full Slack webhook URL. For help with creating a webhook, refer to 
 https://api.slack.com/messaging/webhooks
+
+## ```discord```
+The `discord` module allows SMTP messages to be redirected to a Discord channel using a webhook. A webhook must be
+created for your channel beforehand. Available options for this module are:
+
+**webhook_url**
+
+- _Required_: Yes
+- _Description_: The full Discord webhook URL. For help with creating a webhook, refer to 
+https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
+
 
 ## ```google_chat```
 The `google_chat` module allows SMTP messages to be redirected to a Google Chat space using an app webhook. A webhook 
