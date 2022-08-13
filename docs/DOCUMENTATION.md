@@ -1,6 +1,8 @@
 ## Getting Started
 The following sections provide a basic introduction to using Mail2Beyond as a Python package. You can also use 
-Mail2Beyond entirely from the CLI as a standalone server. Refer to the CLI Documentation to get started with the CLI:
+Mail2Beyond entirely from the CLI as a standalone server. It is recommended for most users to start with the CLI as it 
+will typically meet most use cases and is easier to use. You can refer to the CLI Documentation to get started with 
+the CLI:
 
 [CLI Documentation](#command-line-interface-cli)
 
@@ -26,12 +28,13 @@ slack_connector = mail2beyond.connectors.google_chat.Connector(
 ### Defining Parser Classes
 Parsers allow you to control how the SMTP message's content body is represented before being redirected using a
 connector. If you've used the Mail2Beyond CLI, you are likely aware that the CLI's default parser is the auto parser 
-that can dynamically choose the best parser based on the SMTP message's content-type header. The Python package requires
+and will dynamically choose the best parser based on the SMTP message's content-type header. The Python package requires
 the parser class to be specified explicitly, otherwise the BaseParser class is assumed which may have undesired results
 as it will leave the content body untouched. Parsers are often used to convert content which is not easily understood
-by a human (e.g. HTML content) to a more human-readable format such as markdown. You can reference built-in parser
-classes or you can [write your own custom parser classes](#writing-custom-parsers). Parser classes must be defined 
-before mappings are defined. Below is an example of defining various parser classes that can be used in your mappings:
+by a human (e.g. HTML content) to a more human-readable format such as markdown. You can reference 
+[built-in parser classes](#built-in-parsers) or you can [write your own custom parser classes](#writing-custom-parsers).
+Parser classes must be defined before mappings are defined. Below is an example of defining various parser classes that 
+can be used in your mappings:
 
 ```python
 import mail2beyond
@@ -45,13 +48,14 @@ slack_connector = mail2beyond.connectors.google_chat.Connector(
     webhook_url="<YOUR SLACK WEBHOOK URL>"
 )
 
-# Reference parser classes to use
+# Reference built-in parser classes to use
 auto_parser = mail2beyond.parsers.auto.Parser
 html_parser = mail2beyond.parsers.html.Parser
 plain_parser = mail2beyond.parsers.plain.Parser
 ```
 
-#### Notes
+**Notes**
+
 - Some connector modules will not respect the parser (e.g. `void`, `smtp`).
 - Even when a parser converts the content to a markdown format (e.g. `html`), it does not guarentee the markdown can be
 rendered by the service the connector interacts with
@@ -61,8 +65,8 @@ Mappings allow you to apply logic to which connectors are used based on the SMTP
 specified header is checked for a specific pattern using regular expressions. If a match is found, the connector 
 specified in the mapping will be used to redirect the message. Mappings are checked in descending order and are used on 
 a first-match basis. At least one mapping must be defined, and at least one mapping must use the pattern `default` to 
-assume a default if no other mappings were matched. Connectors must be defined before defining mappings, and mappings 
-must be defined before defining listeners. Below is an example of defining various mappings:
+assign the default action in case no other mappings find a match. Connectors must be defined before defining mappings, 
+and mappings must be defined before defining listeners. Below is an example of defining various mappings:
 
 ```python
 import mail2beyond
@@ -226,11 +230,11 @@ class Connector(mail2beyond.framework.BaseConnector):
     name = "my_custom_connnector"
 ```
 
-### Overwrite the `pre_submit()` Method
+### Overwriting the `pre_submit()` Method
 The `mail2beyond.framework.BaseConnector.pre_submit()` method is used to validate the Connector object before any 
 upstream connection is made. Normally, this method is used to validate the connector object's configuration before 
-running the connector. When the object is first created, any keyword arguments (kwargs) passed into the object creation
-will be available in the object's `config` attribute. You can overwrite the
+running the connector. When the object is first created, any keyword arguments (kwargs) passed into the object at 
+creation will be available in the object's `config` attribute. You can overwrite the
 `mail2beyond.framework.BaseConnector.pre_submit()` method to ensure required configuration values are present and 
 valid. Additionally, the `parser` object is passed to this method and contains the mail headers and content of the SMTP
 messsage that triggered the connector and the `log` attribute contains the logger 
@@ -251,13 +255,15 @@ class Connector(mail2beyond.framework.BaseConnector):
             raise mail2beyond.framework.Error("'url' is required!")
 ```
 
-### Overwrite the `submit()` Method
+### Overwriting the `submit()` Method
 The `mail2beyond.framework.BaseConnector.submit()` method is used to perform the main action for this connector. In 
-most cases, this will be an API request to an upstream service. A `parser` object is passed to this method that contents
-the mail headers and content that triggered this connector and the `log` attribute contains the logger you can use to 
+most cases, this will be an API request to an upstream service. A `parser` object is passed to this method that contains
+the mail headers and content that triggered this connector. The `log` attribute contains the logger you can use to 
 log events that occur within the Connector. Additionally, the `config` attribute will contain any configuration 
 required to perform the desired action. Ideally, this `config` attribute will have been fully validated by the 
-`mail2beyond.framework.BaseConnector.pre_submit()` method.
+`mail2beyond.framework.BaseConnector.pre_submit()` method. You do not need to call the 
+`mail2beyond.framework.BaseConnector.pre_submit()` method within this method as the framework will automatically call
+`mail2beyond.framework.BaseConnector.pre_submit()` before `mail2beyond.framework.BaseConnector.submit()`.
 
 ```python
 import mail2beyond
@@ -380,8 +386,8 @@ Mail2Beyond framework makes this super simple to do. Custom parser classes can b
 content body however you'd like!
 
 ### Creating the Parser Class
-The Mail2Beyond framework includes the BaseParser class that includes all the functions necessary to make your
-custom parser plug and play. To get started, simply create a `Parser` class that extends the 
+The Mail2Beyond framework includes the `mail2beyond.framework.BaseParser` class that includes all the functions 
+necessary to make your custom parser plug and play. To get started, simply create a `Parser` class that extends the 
 `mail2beyond.framework.BaseParser` class and assign it a default name:
 
 ```python
@@ -391,7 +397,7 @@ class Parser(mail2beyond.framework.BaseParser):
     name = "my_custom_parser"
 ```
 
-### Overwrite the `parse_content()` Method
+### Overwriting the `parse_content()` Method
 The `mail2beyond.framework.BaseParser.parse_content()` method is used to perform additional formatting to the SMTP 
 message's content body. The parser's `mail.content` attribute contains the content body from the received SMTP message. 
 In the case the content was sent with an encoding like Base64, the content will _already be decoded_ at this stage. The 
@@ -443,10 +449,10 @@ class Parser(mail2beyond.framework.BaseParser):
         # Return the parsed content
         return content
 
-# Create a connector object using your custom connector class
+# Create a connector object to use
 void_connector = mail2beyond.connectors.void.Connector()
 
-# Create a default mapping that uses your custom connector
+# Create a default mapping that uses your custom parser
 default_mapping = mail2beyond.framework.Mapping(
     pattern="default", 
     connector=void_connector, 
@@ -471,8 +477,9 @@ calling a connector!
 
 # Command Line Interface (CLI)
 -----
-Mail2Beyond can be used entirely by CLI. After installing Mail2Beyond, you will have access to the ```mail2beyond```
-command line tool. The CLI allows you define listeners, connectors and mappings using a JSON or YAML formatted 
+Mail2Beyond can be used entirely by CLI. The CLI is the recommended way to utilize Mail2Beyond as it is easier to use 
+and meets a majority of use cases. After installing Mail2Beyond, you will have access to the ```mail2beyond```
+command line tool. The CLI allows you to define listeners, connectors and mappings using a JSON or YAML formatted 
 configuration file.
 
 ## Arguments
@@ -614,6 +621,12 @@ will parse the content body as HTML and convert it to a more human-readable mark
 - _Description_: The SMTP header to check for a match. Most commonly this will be `from` or `to` to match
 based on the sender or recipient of the SMTP message respectively.
 
+## Starting the Server
+Once you have your configuration file written, you can start the server by running the following command:
+```commandline
+mail2beyond --config /path/to/your/config.yml
+```
+
 # Built-in Connectors
 Connector modules may contain their own configurable options and requirements. Below are the available configuration
 options available to each built-in connector module:
@@ -671,7 +684,7 @@ created for your channel beforehand. Available options for this module are:
 **webhook_url**
 
 - _Required_: Yes
-- _Description_: The full Slack webhook URL. For help to create a webhook, refer to 
+- _Description_: The full Slack webhook URL. For help creating a webhook, refer to 
 https://api.slack.com/messaging/webhooks
 
 ## ```google_chat```
@@ -681,11 +694,27 @@ must be created for your space beforehand. Available options for this module are
 **webhook_url**
 
 - _Required_: Yes
-- _Description_: The full Slack webhook URL. For help to create a webhook, refer to 
+- _Description_: The full Google Chat webhook URL. For help creating a webhook, refer to 
 https://developers.google.com/chat/how-tos/webhooks
 
-## Starting the Server
-Once you have your configuration file written, you can start the server by running the following command:
-```commandline
-mail2beyond --config /path/to/your/config.yml
-```
+# Built-in Parsers
+SMTP messages may contain content of varying types. Mail2Beyond works best with SMTP messages with a `text/plain` 
+content-type, but is equipped to handle other content-types as well. You are also able to 
+[write your own parser module](#writing-custom-parsers) if you need to represent messages in a specific format. Below 
+are the built-in parsers that are available out of the box:
+
+## auto
+The `mail2beyond.parsers.auto.Parser` will automatically select the best parser to use based on the content-type of a 
+received SMTP message. In most cases, this will be the preferred parser to use. For example, if Mail2Beyond received an 
+SMTP message with a `text/html` content-type the `auto` parser will choose to parse the email with the `html` parser. 
+
+## html
+The `mail2beyond.parsers.html.Parser` parser will parse the received SMTP message's content body from HTML to a 
+human-readable markdown format. This works well for basic HTML formatted emails, but may not represent more complex 
+HTML as well. If the `html` parser is not sufficient for your needs, 
+[writing your own parser module](#writing-custom-parsers) may be the best solution.
+
+## plain
+The `mail2beyond.parsers.plain.Parser` will simply represent the SMTP message's content body as plaintext and will not
+apply any additional formatting to the message. This is the default fallback parser for the 
+`mail2beyond.parsers.auto.Parser` in the event that the content-type is unknown.
