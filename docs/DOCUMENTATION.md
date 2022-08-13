@@ -571,13 +571,13 @@ configuration. This name will be used to assign this connector to mappings in yo
 **module**
 
 - _Required_: Yes
-- _Options_: [`void`, `smtp`, `google_chat`, `slack`]
+- _Options_: [`void`, `smtp`, `slack`, `google_chat`, `microsoft_teams`]
 - _Description_: The module this connector will use. Multiple connectors can use the same underlying module.
 
 **config**
 
 - _Required_: Dependent on `module` selected.
-- _Description_: Additional module specific configurations. Refer to the 
+- _Description_: Additional connector module specific configurations. Refer to the 
 [built-in connectors section](#built-in-connectors) for requirements and options for the specified module this 
 connector is assigned.
 
@@ -684,7 +684,7 @@ created for your channel beforehand. Available options for this module are:
 **webhook_url**
 
 - _Required_: Yes
-- _Description_: The full Slack webhook URL. For help creating a webhook, refer to 
+- _Description_: The full Slack webhook URL. For help with creating a webhook, refer to 
 https://api.slack.com/messaging/webhooks
 
 ## ```google_chat```
@@ -694,8 +694,18 @@ must be created for your space beforehand. Available options for this module are
 **webhook_url**
 
 - _Required_: Yes
-- _Description_: The full Google Chat webhook URL. For help creating a webhook, refer to 
+- _Description_: The full Google Chat webhook URL. For help with creating a webhook, refer to 
 https://developers.google.com/chat/how-tos/webhooks
+
+## ```microsoft_teams```
+The `microsoft_teams` module allows SMTP messages to be redirected to a Microsoft Teams channel using an app webhook. 
+A webhook must be created for your channel beforehand. Available options for this module are:
+
+**webhook_url**
+
+- _Required_: Yes
+- _Description_: The full Microsoft Teams webhook URL. For help with creating a webhook, refer to 
+https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook
 
 # Built-in Parsers
 SMTP messages may contain content of varying types. Mail2Beyond works best with SMTP messages with a `text/plain` 
