@@ -1,12 +1,12 @@
 ## Getting Started
-The following sections provides a basic introduction to using Mail2Beyond as a Python package. You can also use 
-Mail2Beyond entirely from the CLI as a standalone server:
+The following sections provide a basic introduction to using Mail2Beyond as a Python package. You can also use 
+Mail2Beyond entirely from the CLI as a standalone server. Refer to the CLI Documentation to get started with the CLI:
 
 [CLI Documentation](#command-line-interface-cli)
 
 ### Defining Connector Objects
-Connectors are the component that redirects SMTP messages to a specific API or service. There are a handful of built-in
-connectors that you can use out of the box, or you can 
+Connectors are the components that redirect SMTP messages to a specific API or service. There are a handful of 
+[built-in connectors](#built-in-connectors) that you can use out of the box, or you can 
 [write your own custom connector modules](#writing-custom-connectors). Below is an example of defining connector objects
 that redirect SMTP messages to Slack and Google Chat:
 
@@ -571,8 +571,8 @@ configuration. This name will be used to assign this connector to mappings in yo
 
 - _Required_: Dependent on `module` selected.
 - _Description_: Additional module specific configurations. Refer to the 
-[connector-specific configurations section](#connector-specific-configuration) for requirements and options for the 
-specified module for this connector.
+[built-in connectors section](#built-in-connectors) for requirements and options for the specified module this 
+connector is assigned.
 
 ### ```mappings```
 A list of mapping rules to apply. Mappings allow you to apply logic to which connectors are used based on the SMTP 
@@ -614,15 +614,15 @@ will parse the content body as HTML and convert it to a more human-readable mark
 - _Description_: The SMTP header to check for a match. Most commonly this will be `from` or `to` to match
 based on the sender or recipient of the SMTP message respectively.
 
-## Connector-Specific Configuration
+# Built-in Connectors
 Connector modules may contain their own configurable options and requirements. Below are the available configuration
 options available to each built-in connector module:
 
-### ```void```
+## ```void```
 The `void` connector module simply discards the received SMTP message. This connector module has no available 
 configuration options. 
 
-### ```smtp```
+## ```smtp```
 The `smtp` connector module forwards received SMTP messages to an upstream SMTP server. On its own, Mail2Beyond does not
 actually deliver the SMTP message to the recipient's mailbox. This connector module enables that functionality but 
 requires an upstream SMTP to deliver the message. Available options for this module are:
@@ -664,7 +664,7 @@ option should be set to `true`. If set to `true`, the `smtp_login_user` and `smt
 - _Required_: Yes w/`smtp_use_login`
 - _Description_: The password to authenticate with.
 
-### ```slack```
+## ```slack```
 The `slack` module allows SMTP messages to be redirected to a Slack channel using a webhook. A webhook must be
 created for your channel beforehand. Available options for this module are:
 
@@ -674,7 +674,7 @@ created for your channel beforehand. Available options for this module are:
 - _Description_: The full Slack webhook URL. For help to create a webhook, refer to 
 https://api.slack.com/messaging/webhooks
 
-### ```google_chat```
+## ```google_chat```
 The `google_chat` module allows SMTP messages to be redirected to a Google Chat space using an app webhook. A webhook 
 must be created for your space beforehand. Available options for this module are:
 
