@@ -2,7 +2,7 @@
 
 ## Reporting a Vulnerability
 
-Should you discover a vulnerability in the pfSense-API code, please report the issue in one of the following ways:
+Should you discover a vulnerability in the code, please report the issue in one of the following ways:
 1) A pull request with code that fixes the discovered vulnerability
 2) A private email to either the project owner or the respective code owner
 3) As a last resort, you may open a public issue on the repository
