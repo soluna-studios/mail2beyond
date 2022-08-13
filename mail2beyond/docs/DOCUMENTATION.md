@@ -226,7 +226,7 @@ class Connector(mail2beyond.framework.BaseConnector):
     name = "my_custom_connnector"
 ```
 
-### Overwrite the `mail2beyond.framework.BaseConnector.pre_submit()` Method:
+### Overwrite the `pre_submit()` Method
 The `mail2beyond.framework.BaseConnector.pre_submit()` method is used to validate the Connector object before any 
 upstream connection is made. Normally, this method is used to validate the connector object's configuration before 
 running the connector. When the object is first created, any keyword arguments (kwargs) passed into the object creation
@@ -251,7 +251,7 @@ class Connector(mail2beyond.framework.BaseConnector):
             raise mail2beyond.framework.Error("'url' is required!")
 ```
 
-### Overwrite the BaseConnector's `submit()` Method:
+### Overwrite the BaseConnector's `submit()` Method
 The `mail2beyond.framework.BaseConnector.submit()` method is used to perform the main action for this connector. In 
 most cases, this will be an API request to an upstream service. A `parser` object is passed to this method that contents
 the mail headers and content that triggered this connector and the `log` attribute contains the logger you can use to 
@@ -391,11 +391,12 @@ class Parser(mail2beyond.framework.BaseParser):
     name = "my_custom_parser"
 ```
 
-### Overwrite the `mail2beyond.framework.BaseParser.parse_content()` Method:
-The `parse_content()` method is used to perform additional formatting to the SMTP message's content body. The parser's
-`mail.content` attribute contains the content body from the received SMTP message. In the case the content was sent 
-with an encoding like Base64, the content will _already be decoded_ at this stage. The `parse_content()` can be
-overwritten to further parse/filter the content before it handed to a connector:
+### Overwrite the `parse_content()` Method
+The `mail2beyond.framework.BaseParser.parse_content()` method is used to perform additional formatting to the SMTP 
+message's content body. The parser's `mail.content` attribute contains the content body from the received SMTP message. 
+In the case the content was sent with an encoding like Base64, the content will _already be decoded_ at this stage. The 
+`mail2beyond.framework.BaseParser.parse_content()` can be overwritten to further parse/filter the content before it is
+handed to a connector:
 
 ```python
 import mail2beyond
