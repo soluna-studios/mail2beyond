@@ -251,7 +251,7 @@ class Connector(mail2beyond.framework.BaseConnector):
             raise mail2beyond.framework.Error("'url' is required!")
 ```
 
-### Overwrite the BaseConnector's `submit()` Method
+### Overwrite the `submit()` Method
 The `mail2beyond.framework.BaseConnector.submit()` method is used to perform the main action for this connector. In 
 most cases, this will be an API request to an upstream service. A `parser` object is passed to this method that contents
 the mail headers and content that triggered this connector and the `log` attribute contains the logger you can use to 
