@@ -47,7 +47,9 @@ class Mail2BeyondCLI:
         self.args = self.parse_args()
         self.listeners = mail2beyond.tools.get_listeners_from_dict(
             config=self.args.config,
-            log_level=logging.DEBUG if self.args.verbose else logging.INFO
+            log_level=logging.DEBUG if self.args.verbose else logging.INFO,
+            connectors_path=self.args.connector_plugins_dir,
+            parsers_path=self.args.parser_plugins_dir
         )
 
         # Start the listeners
@@ -69,6 +71,20 @@ class Mail2BeyondCLI:
             type=config_file,
             required=True,
             help="Set the path to the config file"
+        )
+        parser.add_argument(
+            '--connector-plugins-dir',
+            dest="connector_plugins_dir",
+            required=False,
+            default=None,
+            help="Set the path to a directory that contains plugin connector modules"
+        )
+        parser.add_argument(
+            '--parser-plugins-dir',
+            dest="parser_plugins_dir",
+            required=False,
+            default=None,
+            help="Set the path to a directory that contains plugin parser modules"
         )
         parser.add_argument(
             '--version', "-V",

@@ -10,6 +10,7 @@ import sys
 
 from OpenSSL import crypto
 
+import mail2beyond.framework
 from . import connectors
 from . import parsers
 from . import framework
@@ -54,13 +55,22 @@ def get_connector_modules(path: (str, None) = None):
             try:
                 module = __import__(module_path.stem)
                 getattr(module, "Connector")
-                available_connectors[module_path.stem] = module
             except ModuleNotFoundError as exc:
                 mod_not_found_err_msg = f"failed to import connector module '{module_path.stem}' from '{path}'"
                 raise framework.Error(mod_not_found_err_msg) from exc
             except AttributeError as exc:
                 attr_err_msg = f"connector module '{module_path.stem}' from '{path}' has no class named 'Connector'"
                 raise framework.Error(attr_err_msg) from exc
+
+            # Ensure the module's Connector class is a subclass of BaseConnector
+            if inspect.isclass(module.Connector) and issubclass(module.Connector, mail2beyond.framework.BaseConnector):
+                available_connectors[module_path.stem] = module
+                continue
+
+            # Throw an error if the module's Connector class is not a subclass of BaseConnector
+            raise framework.Error(
+                f"'Connector' class in '{ module_path }' is not subclass of 'mail2beyond.framework.BaseConnector'"
+            )
 
     # Return the gathered connector modules
     return available_connectors
@@ -201,6 +211,16 @@ def get_parser_modules(path: (str, None) = None):
             except AttributeError as exc:
                 attr_err_msg = f"parser module '{module_path.stem}' from '{path}' has no class named 'Parser'"
                 raise framework.Error(attr_err_msg) from exc
+
+            # Ensure the module's Parser class is a subclass of BaseParser
+            if inspect.isclass(module.Parser) and issubclass(module.Parser, mail2beyond.framework.BaseParser):
+                available_parsers[module_path.stem] = module
+                continue
+
+            # Throw an error if the module's Parser class is not a subclass of BaseParser
+            raise framework.Error(
+                f"'Parser' class in '{module_path}' is not subclass of 'mail2beyond.framework.BaseParser'"
+            )
 
     # Return the gathered parser modules
     return available_parsers
