@@ -1,5 +1,5 @@
 # Simple workflow for deploying static content to GitHub Pages
-name: Documentation
+name: Staging Documentation
 
 on:
   # Runs on pushes targeting the staging branch
@@ -25,7 +25,7 @@ jobs:
   deploy:
     environment:
       name: staging
-      url: ${{ steps.deployment.outputs.page_url }}/staging
+      url: ${{ steps.deployment.outputs.page_url }}staging/
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
