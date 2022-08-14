@@ -127,6 +127,7 @@ class Listener:
         """
         self.controller.start()
         self.log.info(f"mail2beyond started listening on {self.address}:{self.port}")
+        self.log_mappings()
 
     @staticmethod
     def wait():
@@ -203,6 +204,16 @@ class Listener:
         # Log debug notice if debug level set
         if level == logging.DEBUG:
             self.log.warning("logging at level DEBUG may expose sensitive information in logs")
+
+    def log_mappings(self):
+        """Logs the configured mappings upon startup for debugging."""
+        # Loop through all configured mappings and log it's configuration.
+        for mapping in self.mappings:
+            self.log.debug(
+                f"loaded mapping with pattern='{ mapping.pattern }' field='{ mapping.field }'"
+                f" connector='{ mapping.connector }' connector_module='{ mapping.connector.__module__ }'"
+                f" parser={ mapping.parser }"
+            )
 
     def get_default_mapping(self, mappings: (list, None) = None):
         """
@@ -511,7 +522,7 @@ class Mapping:
     def parser(self, value):
         """Sets the parser attribute after validating the new value."""
         # Require parser to have a base class of mail2beyond.framework.BaseParser
-        if inspect.isclass(value) and hasattr(value, "parse_content"):
+        if inspect.isclass(value) and issubclass(value, BaseParser):
             self._parser = value
         else:
             raise TypeError("parser must be a class (not object) with base class 'BaseParser'")

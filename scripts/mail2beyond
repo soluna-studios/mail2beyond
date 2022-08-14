@@ -6,15 +6,50 @@ import pathlib
 import json
 import yaml
 import sys
+import pkg_resources
+
+
+def config_file(value_string):
+    """
+    Custom config type to be used by argparse module. This validates that an argument value is an existing JSON
+    file's path. This is intended to be used by argparse's add_argument method's type parameter only.
+    :param value_string: (string) the value to validated
+    :return: (str) the read JSON file data
+    """
+    # Convert the value to a path object
+    path = pathlib.Path(value_string)
+
+    # Ensure the file exists
+    if path.exists() and not path.is_dir():
+        # Read the file's contents
+        with open(str(path), "r") as file:
+            # Check the file type
+            if path.name.endswith(".json"):
+                config_parser = json.load
+            elif path.name.endswith(".yml"):
+                config_parser = yaml.safe_load
+            else:
+                raise argparse.ArgumentTypeError(f"unsupported file type at {str(path)}")
+
+            # Try to parse the contents
+            try:
+                file_data = config_parser(file)
+                return file_data
+            except Exception as _:
+                raise argparse.ArgumentTypeError(f"failed to parse file at {str(path)}")
+    else:
+        raise argparse.ArgumentTypeError(f"file at {str(path)} does not exist")
 
 
 class Mail2BeyondCLI:
     def __init__(self):
-        # Parse command line arguments and create the SMTP listener
+        # Parse command line arguments and create the SMTP listeners
         self.args = self.parse_args()
         self.listeners = mail2beyond.tools.get_listeners_from_dict(
             config=self.args.config,
-            log_level=logging.DEBUG if self.args.verbose else logging.INFO
+            log_level=logging.DEBUG if self.args.verbose else logging.INFO,
+            connectors_path=self.args.connector_plugins_dir,
+            parsers_path=self.args.parser_plugins_dir
         )
 
         # Start the listeners
@@ -26,41 +61,7 @@ class Mail2BeyondCLI:
 
     @staticmethod
     def parse_args():
-        """
-        Sets criteria for arguments and parses them into our args property
-        :return: (none) args property will be populated after running
-        """
-        def config_file(value_string):
-            """
-            Custom path type to be used by argparse module. This validates that an argument value is an existing JSON
-            file's path. This is intended to be used by argparse's add_argument method's type parameter only.
-            :param value_string: (string) the value to validated
-            :return: (str) the read JSON file data
-            """
-            # Convert the value to a path object
-            path = pathlib.Path(value_string)
-
-            # Ensure the file exists
-            if path.exists() and not path.is_dir():
-                # Read the file's contents
-                with open(str(path), "r") as file:
-                    # Check the file type
-                    if path.name.endswith(".json"):
-                        config_parser = json.load
-                    elif path.name.endswith(".yml"):
-                        config_parser = yaml.safe_load
-                    else:
-                        raise argparse.ArgumentTypeError(f"unsupported file type at {str(path)}")
-
-                    # Try to parse the contents
-                    try:
-                        file_data = config_parser(file)
-                        return file_data
-                    except Exception as _:
-                        raise argparse.ArgumentTypeError(f"failed to parse file at {str(path)}")
-            else:
-                raise argparse.ArgumentTypeError(f"file at {str(path)} does not exist")
-
+        """Parses the arguments passed in from the command line."""
         # Setup parser and define arguments
         parser = argparse.ArgumentParser(description='Run an SMTP server that relays messages to upstream APIs.')
         parser.prog = "mail2beyond"
@@ -72,13 +73,26 @@ class Mail2BeyondCLI:
             help="Set the path to the config file"
         )
         parser.add_argument(
-            "--version", "-V",
-            dest="version",
-            action="store_true",
-            help="Print version"
+            '--connector-plugins-dir',
+            dest="connector_plugins_dir",
+            required=False,
+            default=None,
+            help="Set the path to a directory that contains plugin connector modules"
         )
         parser.add_argument(
-            "--verbose", "-v",
+            '--parser-plugins-dir',
+            dest="parser_plugins_dir",
+            required=False,
+            default=None,
+            help="Set the path to a directory that contains plugin parser modules"
+        )
+        parser.add_argument(
+            '--version', "-V",
+            action='version',
+            version='%(prog)s v{version}'.format(version=pkg_resources.require("mail2beyond")[0].version)
+        )
+        parser.add_argument(
+            "--verbose", "--debug", "-v",
             dest="verbose",
             action="store_true",
             help="Log verbose data"

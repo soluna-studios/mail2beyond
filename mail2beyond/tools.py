@@ -6,19 +6,85 @@ import inspect
 import logging
 import pathlib
 import ssl
+import sys
 
 from OpenSSL import crypto
 
+import mail2beyond.framework
 from . import connectors
 from . import parsers
 from . import framework
 
 
-def get_connectors_from_dict(config: dict):
+def get_connector_modules(path: (str, None) = None):
+    """
+    Gathers all available connector modules. This allows a 'path' to be specified to optionally pass in plugin connector
+    modules. Built-in connectors are always included.
+
+    Args:
+        path (str, None): A path to a directory that contains plugin connector modules. Only .py files within this
+            directory will be included. Each .py file must include a class named `Connector` that extends the
+            `mail2beyond.framework.BaseConnector class. If `None` is specified, only the built-in connector modules
+            will be available.
+
+    Raises:
+        mail2beyond.framework.Error: When plugin connector modules could not be loaded.
+
+    Returns:
+        dict: A dictionary of available connector modules. The dictionary keys will be the module names and the values
+            will be the module itself.
+    """
+    # Start by gathering the built-in connectors from the mail2beyond.connectors sub-package.
+    available_connectors = dict(inspect.getmembers(connectors, inspect.ismodule))
+
+    # If a plugin path was passed in, include modules within that directory as well.
+    if path:
+        # Convert 'path' into an object
+        path_obj = pathlib.Path(path)
+
+        # Require path to be an existing directory
+        if not path_obj.exists() or not path_obj.is_dir():
+            raise framework.Error(f"failed to load connector modules '{path}' is not an existing directory")
+
+        # Add this directory to our Python path
+        sys.path.append(str(path_obj.absolute()))
+
+        # Loop through each .py file in the directory and ensure it is valid
+        for module_path in path_obj.glob("*.py"):
+            # Verify this module could be imported, contains the Connector class and is added to available connectors.
+            try:
+                module = __import__(module_path.stem)
+                getattr(module, "Connector")
+            except ModuleNotFoundError as exc:
+                mod_not_found_err_msg = f"failed to import connector module '{module_path.stem}' from '{path}'"
+                raise framework.Error(mod_not_found_err_msg) from exc
+            except AttributeError as exc:
+                attr_err_msg = f"connector module '{module_path.stem}' from '{path}' has no class named 'Connector'"
+                raise framework.Error(attr_err_msg) from exc
+
+            # Ensure the module's Connector class is a subclass of BaseConnector
+            if inspect.isclass(module.Connector) and issubclass(module.Connector, mail2beyond.framework.BaseConnector):
+                available_connectors[module_path.stem] = module
+                continue
+
+            # Throw an error if the module's Connector class is not a subclass of BaseConnector
+            raise framework.Error(
+                f"'Connector' class in '{ module_path }' is not subclass of 'mail2beyond.framework.BaseConnector'"
+            )
+
+    # Return the gathered connector modules
+    return available_connectors
+
+
+def get_connectors_from_dict(config: dict, path: (str, None) = None):
     """
     Converts a dictionary representations of connectors to connector objects.
     Args:
         config (dict): A dictionary representation of different connectors to create.
+        path (str, None): A path to a directory that contains plugin connector modules. Only .py files within this
+            directory will be included. Each .py file must include a class named `Connector` that extends the
+            `mail2beyond.framework.BaseConnector` class. If `None` is specified, only the built-in connector modules
+            will be available.
 
     Raises:
         mail2beyond.framework.Error: When a validation error occurs.
@@ -28,7 +94,7 @@ def get_connectors_from_dict(config: dict):
     """
     # Create a list to store the created connector objects
     valid_connectors = []
-    available_connectors = dict(inspect.getmembers(connectors, inspect.ismodule))
+    available_connectors = get_connector_modules(path)
 
     # Require connectors config to be defined
     if "connectors" not in config.keys():
@@ -99,13 +165,82 @@ def get_connector_by_name(name, connector_objs):
     return None
 
 
-def get_mappings_from_dict(config: dict):
+def get_parser_modules(path: (str, None) = None):
+    """
+    Gathers all available parser modules. This allows a 'path' to be specified to optionally pass in plugin parser
+    modules. Built-in parsers are always included.
+
+    Args:
+        path (str, None): A path to a directory that contains plugin parser modules. Only .py files within this
+            directory will be included. Each .py file must include a class named `Parser` that extends the
+            `mail2beyond.framework.BaseParser` class. If `None` is specified, only the built-in parser modules
+            will be available.
+
+    Raises:
+        mail2beyond.framework.Error: When plugin parser modules could not be loaded.
+
+    Returns:
+        dict: A dictionary of available parser modules. The dictionary keys will be the module names and the values
+            will be the module itself.
+    """
+    # Start by gathering the built-in parsers from the mail2beyond.connectors sub-package.
+    available_parsers = dict(inspect.getmembers(parsers, inspect.ismodule))
+
+    # If a plugin path was passed in, include modules within that directory as well.
+    if path:
+        # Convert 'path' into an object
+        path_obj = pathlib.Path(path)
+
+        # Require path to be an existing directory
+        if not path_obj.exists() or not path_obj.is_dir():
+            raise framework.Error(f"failed to load parser modules '{path}' is not an existing directory")
+
+        # Add this directory to our Python path
+        sys.path.append(str(path_obj.absolute()))
+
+        # Loop through each .py file in the directory and ensure it is valid
+        for module_path in path_obj.glob("*.py"):
+            # Verify this module could be imported, contains the Parser class and is added to available connectors.
+            try:
+                module = __import__(module_path.stem)
+                getattr(module, "Parser")
+                available_parsers[module_path.stem] = module
+            except ModuleNotFoundError as exc:
+                mod_not_found_err_msg = f"failed to import parser module '{module_path.stem}' from '{path}'"
+                raise framework.Error(mod_not_found_err_msg) from exc
+            except AttributeError as exc:
+                attr_err_msg = f"parser module '{module_path.stem}' from '{path}' has no class named 'Parser'"
+                raise framework.Error(attr_err_msg) from exc
+
+            # Ensure the module's Parser class is a subclass of BaseParser
+            if inspect.isclass(module.Parser) and issubclass(module.Parser, mail2beyond.framework.BaseParser):
+                available_parsers[module_path.stem] = module
+                continue
+
+            # Throw an error if the module's Parser class is not a subclass of BaseParser
+            raise framework.Error(
+                f"'Parser' class in '{module_path}' is not subclass of 'mail2beyond.framework.BaseParser'"
+            )
+
+    # Return the gathered parser modules
+    return available_parsers
+
+
+def get_mappings_from_dict(config: dict, connectors_path: (str, None) = None, parsers_path: (str, None) = None):
     """
     Converts a dictionary representations of mappings to Mapping objects. Since Mapping objects are dependent on
     a Connector object, the dictionary must also include representations of Connector objects to use.
 
     Args:
         config (dict): A dictionary representation of different mappings to create.
+        connectors_path (str, None): A path to a directory that contains plugin connector modules. Only .py files within
+            this directory will be included. Each .py file must include a class named `Connector` that extends the
+            `mail2beyond.framework.BaseConnector` class. If `None` is specified, only the built-in connector modules
+            will be available.
+        parsers_path (str, None): A path to a directory that contains plugin parser modules. Only .py files within this
+            directory will be included. Each .py file must include a class named `Parser` that extends the
+            `mail2beyond.framework.BaseParser` class. If `None` is specified, only the built-in parser modules
+            will be available.
 
     Raises:
         mail2beyond.framework.Error: When a validation error occurs.
@@ -114,8 +249,8 @@ def get_mappings_from_dict(config: dict):
         list: A list of Mapping objects that can be used.
     """
     # Variables
-    config_connectors = get_connectors_from_dict(config)
-    available_parsers = dict(inspect.getmembers(parsers, inspect.ismodule))
+    config_connectors = get_connectors_from_dict(config, path=connectors_path)
+    available_parsers = get_parser_modules(path=parsers_path)
     valid_mappings = []
 
     # Require mappings config to be defined
@@ -166,7 +301,7 @@ def get_mappings_from_dict(config: dict):
     return valid_mappings
 
 
-def get_listeners_from_dict(config: dict, log_level: int = logging.NOTSET):
+def get_listeners_from_dict(config: dict, log_level: int = logging.NOTSET, **kwargs):
     """
     Converts a dictionary representations of listeners to Listener objects. Since Listener objects are dependent on
     a Mapping objects, and Mapping objects are dependent on Connector objects, the dictionary must also include
@@ -176,6 +311,14 @@ def get_listeners_from_dict(config: dict, log_level: int = logging.NOTSET):
         config (dict): A dictionary representation of different mappings to create.
         log_level (int): Sets the logging level the Listeners' Logger will start logging at. See
             https://docs.python.org/3/library/logging.html#logging-levels
+        **connectors_path (str, None): A path to a directory that contains plugin connector modules. Only .py files
+            within this directory will be included. Each .py file must include a class named `Connector` that extends
+            the`mail2beyond.framework.BaseConnector` class. If `None` is specified, only the built-in connector modules
+            will be available.
+        **parsers_path (str, None): A path to a directory that contains plugin parser modules. Only .py files within
+            this directory will be included. Each .py file must include a class named `Parser` that extends the
+            `mail2beyond.framework.BaseParser` class. If `None` is specified, only the built-in parser modules
+            will be available.
 
     Raises:
         mail2beyond.framework.Error: When a validation error occurs.
@@ -201,8 +344,12 @@ def get_listeners_from_dict(config: dict, log_level: int = logging.NOTSET):
     tls_minimum_version_default = "tls1_2"
 
     # Variables
-    mappings = get_mappings_from_dict(config)
     valid_listeners = []
+    mappings = get_mappings_from_dict(
+        config,
+        connectors_path=kwargs.get("connectors_path"),
+        parsers_path=kwargs.get("parsers_path")
+    )
 
     # Require listeners config to be defined.
     if "listeners" not in config.keys():

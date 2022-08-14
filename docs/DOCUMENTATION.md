@@ -484,12 +484,14 @@ configuration file.
 
 ## Arguments
 
-| Argument               | Required | Description                                                        |
-|------------------------|:---------|--------------------------------------------------------------------|
-| `--config (-c) <FILE>` | Yes      | Specifies a config file to load. This must be a JSON or YAML file. |
-| `--version (-V)`       | No       | Prints the version of mail2beyond installed.                       |
-| `--verbose (-v)`       | No       | Enables verbose logging.                                           |
-| `--help (-h)`          | No       | Prints the help page.                                              |
+| Argument                 | Required | Description                                                          |
+|--------------------------|:---------|----------------------------------------------------------------------|
+| `--config (-c) <FILE>`   | Yes      | Specifies a config file to load. This must be a JSON or YAML file.   |
+| `--connector-plugin-dir` | No       | Specifies a path to a directory containing plugin connector modules. |
+| `--parser-plugin-dir`    | No       | Specifies a path to a directory containing plugin parser modules.    |
+| `--version (-V)`         | No       | Prints the version of mail2beyond installed.                         |
+| `--verbose (-v)`         | No       | Enables verbose logging.                                             |
+| `--help (-h)`            | No       | Prints the help page.                                                |
 
 ## Configuration
 A configuration file must be written before ```mail2beyond``` is started. It may also be helpful to check out the 
@@ -572,7 +574,8 @@ configuration. This name will be used to assign this connector to mappings in yo
 
 - _Required_: Yes
 - _Options_: [`void`, `smtp`, `slack`, `discord`, `google_chat`, `microsoft_teams`]
-- _Description_: The module this connector will use. Multiple connectors can use the same underlying module.
+- _Description_: The module this connector will use. Multiple connectors can use the same underlying module. You can 
+also [use your own custom connector modules](#using-plugin-connector-and-parser-modules).
 
 **config**
 
@@ -605,10 +608,9 @@ configuration. Multiple mappings can use the same the connector.
 - _Required_: No
 - _Options_: [`auto`, `plain`, `html`]
 - _Default_: `auto`
-- _Description_: Explicitly set the content-type parser to use. By default, the `auto` parser will be chosen to 
-select the parser that best matches the SMTP message's content-type header. The `plain` parser will not parse the
-content body and is the fallback for the `auto` parser if no parser exists for the content-type. The `html` parser
-will parse the content body as HTML and convert it to a more human-readable markdown format.
+- _Description_: Explicitly set the content-type parser to use. See the [built-in parsers section](#built-in-parsers)
+for more information on available parsers. You can also 
+[use your own custom parser modules](#using-plugin-connector-and-parser-modules).
 - _Notes_:
   - Some connector modules do not respect the `parser` option (e.g. `smtp`, `void`)
   - Even though the `html` parser converts the content to markdown, this does not guarantee the markdown content will
@@ -626,6 +628,63 @@ Once you have your configuration file written, you can start the server by runni
 ```commandline
 mail2beyond --config /path/to/your/config.yml
 ```
+
+## Using Plugin Connector and Parser Modules
+If you have written your own [connector modules](#writing-custom-connectors) and/or 
+[parser modules](#writing-custom-parsers), you can include them from the CLI using the `--connector-plugins-dir` and 
+`--parser-plugins-dir` commands respectively. If specified, both these commands require a path to an existing directory 
+where your plugin connector and parser modules are stored. In order for plugins to be included, your modules must use 
+the `.py` extension within the specified directory. Additionally, extended `BaseConnector` classes must be named 
+`Connector` and extended `BaseParser` classes must be named `Parser` in order for them to be used via CLI. 
+
+In example, say we have a file structure like this:
+
+```
+plugins/
+├─ connectors/
+│  ├─ my_custom_connector_module_1.py
+│  ├─ my_custom_connector_module_2.py
+├─ parsers/
+│  ├─ my_custom_parser_1.py
+```
+
+In your configuration, you can utilize the custom connectors and parsers like such:
+
+```yaml
+---
+listeners:
+  - address: localhost
+    port: 25
+
+mappings:
+  - pattern: default
+    field: to
+    parser: my_custom_parser_1
+    connector: custom_connector_1
+
+  - pattern: "some custom pattern"
+    field: to
+    parser: my_custom_parser_1
+    connector: custom_connector_2
+
+connectors:
+  - name: custom_connector_1
+    module: my_custom_connector_module_1
+    
+  - name: custom_connector_2
+    module: my_custom_connector_module_2
+```
+
+And finally, you can start the server and set the plugin module directories:
+```commandline
+mail2beyond --config /path/to/your/config.yml --connector-plugins-dir plugins/connectors/ --parser-plugins-dir plugins/parsers/ 
+```
+
+**Notes**
+
+- Even when you specify plugin modules, you will still have access to all the built-in connectors and parsers. In the 
+  event that your custom module uses the same name as a built-in module, _your module takes priority over the built-in
+  parser and the built-in parser will not be available to use.
 
 # Built-in Connectors
 Connector modules may contain their own configurable options and requirements. Below are the available configuration

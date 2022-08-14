@@ -28,7 +28,7 @@ setup(
     author='Jared Hendrickson',
     author_email='jaredhendrickson13@gmail.com',
     url="https://github.com/soluna-studios/mail2beyond",
-    license="Apache-2.0",
+    license="MIT",
     description="A Python based SMTP server package and CLI that redirects incoming SMTP messages to upstream APIs like"
                 " Google Chat, Slack and more!.",
     long_description=read_me(),
