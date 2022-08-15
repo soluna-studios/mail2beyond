@@ -89,7 +89,7 @@ class Mail2BeyondCLI:
         parser.add_argument(
             '--version', "-V",
             action='version',
-            version='%(prog)s v{version}'.format(version=pkg_resources.require("mail2beyond")[0].version)
+            version='%(prog)s v{version}'.format(version=mail2beyond.__version__)
         )
         parser.add_argument(
             "--verbose", "--debug", "-v",
