@@ -2,7 +2,7 @@ name: Staging PyPI
 
 on:
   pull_request:
-    branches: [ "master", "staging" ]
+    branches: [ "master" ]
 
 permissions:
   contents: read
