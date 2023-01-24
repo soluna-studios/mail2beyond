@@ -1,6 +1,6 @@
-setuptools~=65.6.3
-requests~=2.28.1
-aiosmtpd~=1.4.3
+setuptools~=66.1.1
+requests~=2.28.2
+aiosmtpd~=1.4.4
 pyyaml~=6.0
 pyOpenSSL~=23.0.0
 pylint~=2.14.5
