@@ -1,4 +1,4 @@
-setuptools~=66.1.1
+setuptools~=67.7.2
 requests~=2.29.0
 aiosmtpd~=1.4.4
 pyyaml~=6.0
