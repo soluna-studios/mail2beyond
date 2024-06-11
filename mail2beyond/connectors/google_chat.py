@@ -18,7 +18,8 @@ class Connector(framework.BaseConnector):
             resp = requests.post(
                 url=self.config["webhook_url"],
                 headers={'Content-Type': 'application/json; charset=UTF-8'},
-                json={"text": f"*{parser.subject}*\n\n{parser.content}"}
+                json={"text": f"*{parser.subject}*\n\n{parser.content}"},
+                timeout=30
             )
             self.log.debug(f"connector '{self}' responded with {resp.status_code} status {resp.text}")
         except Exception as google_chat_req_err:

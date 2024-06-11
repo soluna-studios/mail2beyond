@@ -33,7 +33,8 @@ class Connector(mail2beyond.framework.BaseConnector):
             resp = requests.post(
                 url=self.config["url"],
                 headers={'Content-Type': 'application/json'},
-                json={"msg": f"{subject}\n{content}\n{date}\n{some_specific_header}"}
+                json={"msg": f"{subject}\n{content}\n{date}\n{some_specific_header}"},
+                timeout=30
             )
             self.log.debug(f"connector 'my_custom_connector' responded with {resp.status_code} status {resp.text}")
         except Exception as req_err:
