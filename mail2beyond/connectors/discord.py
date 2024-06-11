@@ -18,7 +18,8 @@ class Connector(framework.BaseConnector):
             resp = requests.post(
                 url=self.config["webhook_url"],
                 headers={'Content-Type': 'application/json'},
-                json={"content": f"*{parser.subject}*\n\n{parser.content}"}
+                json={"content": f"*{parser.subject}*\n\n{parser.content}"},
+                timeout=30
             )
             self.log.debug(f"connector '{self}' responded with {resp.status_code} status {resp.text}")
         except Exception as discord_req_err:
