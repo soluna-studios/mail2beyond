@@ -5,4 +5,4 @@ pyyaml~=6.0
 pyOpenSSL~=24.1.0
 pylint~=3.2.3
 html2text~=2024.2.26
-pdoc3~=0.10.0
+pdoc3~=0.11.1
