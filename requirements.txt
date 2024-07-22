@@ -3,6 +3,6 @@ setuptools~=70.1.1
 requests~=2.32.3
 pyyaml~=6.0
 pyOpenSSL~=24.1.0
-pylint~=3.2.5
+pylint~=3.2.6
 html2text~=2024.2.26
 pdoc3~=0.10.0
