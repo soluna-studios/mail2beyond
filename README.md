@@ -1,5 +1,9 @@
 Mail2Beyond
 =========
+
+> [!WARNING]
+> This project is no longer maintained. Feel free to reach out if you would like to take ownership of the project going forward.
+
 [![PyPI](https://github.com/soluna-studios/mail2beyond/actions/workflows/pypi.yml/badge.svg)](https://github.com/soluna-studios/mail2beyond/actions/workflows/pypi.yml)
 [![Documentation Build](https://github.com/soluna-studios/mail2beyond/actions/workflows/documentation.yml/badge.svg)](https://github.com/soluna-studios/mail2beyond/actions/workflows/documentation.yml)
 [![Unit Tests](https://github.com/soluna-studios/mail2beyond/actions/workflows/unittest.yml/badge.svg)](https://github.com/soluna-studios/mail2beyond/actions/workflows/unittest.yml)
